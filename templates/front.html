@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تشغيل فيديو على الشاشة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Nunito:wght@300;600;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', 'Roboto', sans-serif !important;
+        }
+        h1, h2, p, input, button, span {
+            font-family: 'Nunito', 'Roboto', sans-serif !important;
+        }
+
+        body {
+            font-family: 'Inter', 'Poppins', sans-serif !important;
+            text-align: center;
+            color: white;
+            padding: 50px;
+            overflow: hidden;
+            position: relative;
+            height: 100vh;
+            border: 10px solid #626279; /* إضافة بوردر حول الصفحة */
+            margin-bottom: 500px;
+            padding-bottom: 500px;
+        }
+        
+        /* خلفية متحركة */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #1b1e32);
+            background-size: 400% 400%;
+            animation: gradientBG 10s ease infinite;
+            z-index: -1;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; transform: scale(1); }
+            50% { background-position: 100% 50%; transform: scale(1.05); }
+            100% { background-position: 0% 50%; transform: scale(1); }
+        
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            margin-top: 120px;
+            
+        }
+        input {
+            font-size: 18px;
+            padding: 10px;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            font-size: 18px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            display: inline-block;
+            text-align: center;
+            font-weight: bold;
+            padding: 0.7em 2em;
+            margin-top: 10px;
+            /* background-color: #00d4ff; */
+            color: #000000;
+            /*border: 3px solid #00324f;*/
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            position: relative;
+            box-shadow: 0 2px 10px rgb(0,0,0,0.16),
+            0 30px 6px rgba(0,0,0,0.1);
+            transition: 0.3s ease all;
+            z-index: 1;
+        }
+        button:hover, button:focus {
+           color: rgb(0, 0, 0);
+        }
+        button:before{
+            transition:0.5s all ease;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            right: 50%;
+            bottom: 0;
+            opacity: 0;
+            content: '';
+            background-color: #00ddff;
+            z-index: -1;
+        }
+
+        button:hover:before, button:focus:before {
+            transition: 0.5s all ease;
+            left: 0;
+            right: 0;
+            opacity: 1;
+
+        }
+
+    button:active{
+        transform: scale(0.9);
+    }
+
+        #statusE {
+            margin-top: 20px;
+            font-size: 60px;
+            color: #ffcc00;
+        }
+        #statusE:active{
+            transform: scale(0.9);
+        }
+
+
+        #statusE{
+            
+            transition: transform 0.3s ease-in-out; /* لجعل التغيير سلس */
+        }
+
+        #statusE:hover{
+            transform: scale(1.5); /* تكبير النص بنسبة 1.5 عند مرور الماوس */
+
+        }
+
+        /* #status:before{
+            transition:0.5s all ease;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            right: 50%;
+            bottom: 0;
+            opacity: 0;
+            content: '';
+            background-color: #000000;
+            z-index: -1;
+        } */
+        /* #status:hover:before, #status:focus:before {
+            transition: 0.5s ease;
+            left: 0;
+            right: 0;
+            opacity: 1;
+
+        } */
+
+        span{
+            position:relative;
+            font-family: "lato",sans-serif;
+            top: 10px;
+            color: #f517ab;
+            display: inline-block;
+            font-size: 3rem;
+            text-shadow: 0 1px 0 #b7b7b7, 0 2px 0 #b7b7b7, 0 3px 0 #b7b7b7,
+            0 4px 0 #b7b7b7, 0 5px 0 #b7b7b7, 6px 0 transparent, 0 7px 0 transparent,
+            0 8px 0 transparent, 0 9px 0 transparent, 0 10px 10px rgba(0, 0, 0.5);
+            animation: bounce 0.4s ease-in-out infinite
+            alternate; 
+         }
+       h1 span:nth-child(2){
+        animation-delay:0.1s ;
+
+       }
+       h1 span:nth-child(3){
+        animation-delay:0.2s ;
+       }
+       h1 span:nth-child(4){
+        animation-delay:0.3s;
+       }
+       h1 span:nth-child(5){
+        animation-delay:0.4s;
+       }
+       h1 span:nth-child(6){
+        animation-delay:0.5s;
+       }
+
+        @keyframes bounce {
+        100%{
+            top: -20px;
+            text-shadow: 0 1px 0 #ccc, 0 2px 0 #ccc, 0 3px 0 #ccc,
+            0 4px 0 #ccc, 0 5px 0 #ccc, 0 6px 0 #ccc, 0 7px 0 #ccc,
+            0 8px 0 #ccc, 0 9px 0 #ccc,0 60px 30px rgba(0, 0, 0.3);
+        }
+       }  
+         /* @keyframes bounce{
+            0%{
+                top: 0;
+            }
+            100%{
+                top: -20px;
+                text-shadow: 0 5px 5px rgba(0, 0, 0.3);
+            }
+         } */
+        .status{
+            font-size: 100px;
+        }
+    </style>
+</head>
+<body>
+    
+    <h1>
+        <span>H</span>
+        <span>E</span>
+        <span>L</span>
+        <span>L</span>
+        <span>O</span>
+        <span>!</span>
+    </h1>
+    <h1>Play video on TV</h1>
+    <input type="text" id="videoUrl" placeholder="Put the link here">
+    <br>
+    <button onclick="playVideo()">▶ Start Video </button>
+    <br>
+    <button onclick="changeVolume('up')">+</button>
+    <button onclick="changeVolume('down')">-</button>
+    <button onclick="changeVolume('mute')">mute</button>
+    <p id="statusE">📺</p>
+    <p id="status"></p>
+    <h2>Some Channels</h2>
+    <hr style="width: 50%;">
+
+    <button onclick="playPresetVideo(this)" id="f" data-url="https://www.youtube.com/watch?v=bNyUyrR0PHo&ab_channel=AlJazeeraArabic%D9%82%D9%86%D8%A7%D8%A9%D8%A7%D9%84%D8%AC%D8%B2%D9%8A%D8%B1%D8%A9https://www.youtube.com/watch?v=PVHVV6pzz3U&ab_channel=%D8%A7%D8%A8%D9%88%D9%85%D8%AD%D8%B3%D9%86">▶ قناة الجزيرة</button>
+    <button onclick="playPresetVideo(this)" data-url="https://www.youtube.com/@osh3lek">▶ قناة ملزلز</button>
+    <br>
+    <button onclick="reboot('reboot')">Reboot The TV</button>
+    <script>
+        function reboot(action){
+            let url ="";
+            url = "/reboot";
+            fetch(url,{
+                method: 'POST',
+                headers: {'content-Type':'application/json'}
+            })
+            .then(response => response.json())
+        }
+        function changeVolume(action) {
+            let url = "";
+
+            if (action === 'up') url = "/volume_up";
+            else if (action === 'down') url = "/volume_down";
+            else if (action === 'mute') url = "/mute";
+
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            
+        }
+        function playVideo() {
+            const videoUrl = document.getElementById("videoUrl").value;
+
+            if (!videoUrl.trim()) {
+                document.getElementById("status").innerText = "❌ يرجى إدخال رابط فيديو صحيح!";
+                return;
+            }
+            document.getElementById("status").innerText = "⏳ جاري تشغيل الفيديو...";
+            
+
+            fetch('/play', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ video_url: videoUrl })
+            })
+            // .then(response => response.json())
+            // .then(data => {
+            //     document.getElementById("status").innerText = data.message;
+            //     if (data.error) {
+            //         console.error("ADB Error:", data.error);
+            //     }
+            // })
+            // .catch(error => {
+            //     document.getElementById("status").innerText = "❌ حدث خطأ!";
+            //     console.error("Fetch Error:", error);
+            // });
+
+        }
+        function playPresetVideo(button) {
+            let url = button.getAttribute("data-url");
+            document.getElementById("status").innerText = "🎬 تم التشغيل";
+    
+            fetch('/play', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ video_url: url })
+            })
+            // .then(response => response.json())
+            // .then(data => {
+            //     document.getElementById("status").innerText = data.message;
+            // })
+            // .catch(error => {
+            //     document.getElementById("status").innerText = "❌ حدث خطأ!";
+            //     console.error("Fetch Error:", error);
+            // });
+        }
+
+    </script>
+    
+
+</body>
+</html>
