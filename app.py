@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS  # ✅ استيراد CORS
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 TV_IP = "192.168.100.22"  # استبدله بعنوان تلفزيونك
 
 @app.route('/')
@@ -35,10 +35,6 @@ def play_video():
 
 @app.route('/volume_up', methods=['POST'])
 def volume_up():
-    is_connected, error = ensure_adb_connection()
-    if not is_connected:
-        return jsonify({"message": "❌ فشل الاتصال بـ ADB", "error": error}), 500
-
     result = subprocess.run(["adb", "-s", f"{TV_IP}:5555", "shell", "input", "keyevent", "KEYCODE_VOLUME_UP"], capture_output=True, text=True)
 
     if result.returncode == 0:
@@ -48,10 +44,6 @@ def volume_up():
 
 @app.route('/volume_down', methods=['POST'])
 def volume_down():
-    is_connected, error = ensure_adb_connection()
-    if not is_connected:
-        return jsonify({"message": "❌ فشل الاتصال بـ ADB", "error": error}), 500
-
     result = subprocess.run(["adb", "-s", f"{TV_IP}:5555", "shell", "input", "keyevent", "KEYCODE_VOLUME_DOWN"], capture_output=True, text=True)
 
     if result.returncode == 0:
@@ -61,10 +53,6 @@ def volume_down():
 
 @app.route('/mute', methods=['POST'])
 def mute():
-    is_connected, error = ensure_adb_connection()
-    if not is_connected:
-        return jsonify({"message": "❌ فشل الاتصال بـ ADB", "error": error}), 500
-
     result = subprocess.run(["adb", "-s", f"{TV_IP}:5555", "shell", "input", "keyevent", "KEYCODE_VOLUME_MUTE"], capture_output=True, text=True)
 
     if result.returncode == 0:
@@ -74,10 +62,6 @@ def mute():
 
 @app.route('/reboot', methods=['POST'])
 def reboot():
-    is_connected, error = ensure_adb_connection()
-    if not is_connected:
-        return jsonify({"message": "❌ فشل الاتصال بـ ADB", "error": error}), 500
-
     result = subprocess.run(["adb", "-s", f"{TV_IP}:5555", "shell", "reboot"], capture_output=True, text=True)
 
     if result.returncode == 0:
@@ -86,4 +70,4 @@ def reboot():
         return jsonify({"message": "❌ فشل في إعادة تشغيل التلفزيون", "error": result.stderr})
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000, debug=True)
