@@ -1,8 +1,9 @@
 import subprocess
 from flask import Flask, request, jsonify
+from flask_cors import CORS  # ✅ استيراد CORS
 
 app = Flask(__name__)
-
+CORS(app)
 TV_IP = "192.168.100.22"  # استبدله بعنوان تلفزيونك
 
 def ensure_adb_connection():
@@ -24,6 +25,7 @@ def play_video():
     is_connected, error = ensure_adb_connection()
     if not is_connected:
         return jsonify({"message": "❌ فشل الاتصال بـ ADB", "error": error}), 500
+    print(f"🔹 تشغيل الفيديو: {video_url}")  # ✅ طباعة الأمر للتأكد أنه يصل
 
     # أمر تشغيل الفيديو عبر يوتيوب
     adb_command = [
@@ -93,4 +95,4 @@ def reboot():
         return jsonify({"message": "❌ فشل في إعادة تشغيل التلفزيون", "error": result.stderr})
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000)
