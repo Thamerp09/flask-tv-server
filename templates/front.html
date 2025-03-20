@@ -231,75 +231,78 @@
     <br>
     <button onclick="reboot('reboot')">Reboot The TV</button>
     <script>
-        function reboot(action){
-            let url ="";
-            url = "/reboot";
-            fetch(url,{
-                method: 'POST',
-                headers: {'content-Type':'application/json'}
-            })
-            .then(response => response.json())
+       const NGROK_URL = "https://7240-2001-16a2-f737-9400-1d23-d789-57a2-ad19.ngrok-free.app";
+
+function reboot() {
+    fetch(`${NGROK_URL}/reboot`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+    })
+    .then(response => response.json())
+    .then(data => console.log("Reboot response:", data))
+    .catch(error => console.error("Fetch Error:", error));
+}
+
+function changeVolume(action) {
+    let url = "";
+    if (action === 'up') url = "/volume_up";
+    else if (action === 'down') url = "/volume_down";
+    else if (action === 'mute') url = "/mute";
+
+    fetch(`${NGROK_URL}${url}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+    })
+    .then(response => response.json())
+    .then(data => console.log("Volume response:", data))
+    .catch(error => console.error("Fetch Error:", error));
+}
+
+function playVideo() {
+    const videoUrl = document.getElementById("videoUrl").value;
+
+    if (!videoUrl.trim()) {
+        document.getElementById("status").innerText = "❌ يرجى إدخال رابط فيديو صحيح!";
+        return;
+    }
+    document.getElementById("status").innerText = "⏳ جاري تشغيل الفيديو...";
+
+    fetch(`${NGROK_URL}/play`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ video_url: videoUrl })
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById("status").innerText = data.message;
+        if (data.error) {
+            console.error("ADB Error:", data.error);
         }
-        function changeVolume(action) {
-            let url = "";
+    })
+    .catch(error => {
+        document.getElementById("status").innerText = "❌ حدث خطأ!";
+        console.error("Fetch Error:", error);
+    });
+}
 
-            if (action === 'up') url = "/volume_up";
-            else if (action === 'down') url = "/volume_down";
-            else if (action === 'mute') url = "/mute";
+function playPresetVideo(button) {
+    let url = button.getAttribute("data-url");
+    document.getElementById("status").innerText = "🎬 تم التشغيل";
 
-            fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' }
-            })
-            .then(response => response.json())
-            
-        }
-        function playVideo() {
-            const videoUrl = document.getElementById("videoUrl").value;
-
-            if (!videoUrl.trim()) {
-                document.getElementById("status").innerText = "❌ يرجى إدخال رابط فيديو صحيح!";
-                return;
-            }
-            document.getElementById("status").innerText = "⏳ جاري تشغيل الفيديو...";
-            
-
-            fetch('/play', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ video_url: videoUrl })
-            })
-            // .then(response => response.json())
-            // .then(data => {
-            //     document.getElementById("status").innerText = data.message;
-            //     if (data.error) {
-            //         console.error("ADB Error:", data.error);
-            //     }
-            // })
-            // .catch(error => {
-            //     document.getElementById("status").innerText = "❌ حدث خطأ!";
-            //     console.error("Fetch Error:", error);
-            // });
-
-        }
-        function playPresetVideo(button) {
-            let url = button.getAttribute("data-url");
-            document.getElementById("status").innerText = "🎬 تم التشغيل";
-    
-            fetch('/play', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ video_url: url })
-            })
-            // .then(response => response.json())
-            // .then(data => {
-            //     document.getElementById("status").innerText = data.message;
-            // })
-            // .catch(error => {
-            //     document.getElementById("status").innerText = "❌ حدث خطأ!";
-            //     console.error("Fetch Error:", error);
-            // });
-        }
+    fetch(`${NGROK_URL}/play`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ video_url: url })
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById("status").innerText = data.message;
+    })
+    .catch(error => {
+        document.getElementById("status").innerText = "❌ حدث خطأ!";
+        console.error("Fetch Error:", error);
+    });
+}
 
     </script>
     
