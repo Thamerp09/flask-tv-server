@@ -6,6 +6,7 @@ app = Flask(__name__)
 CORS(app)
 TV_IP = "192.168.100.22"  # استبدله بعنوان تلفزيونك
 
+@app.route('/')
 def home():
     return render_template('font.html')
 
