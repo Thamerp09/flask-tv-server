@@ -271,8 +271,7 @@
 
         fetch(`${NGROK_URL}/play`, {
             method: 'POST',
-            mode: "cors",  // ✅ تفعيل CORS
-            credentials: "include",  // ✅ التأكد من إرسال الطلب كاملاً
+            
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${AUTH_TOKEN}` },
             body: JSON.stringify({ video_url: videoUrl })
         })
@@ -284,8 +283,7 @@
 
         fetch(`${NGROK_URL}/play`, {
             method: 'POST',
-            mode: "cors",  // ✅ تفعيل CORS
-            credentials: "include",  // ✅ التأكد من إرسال الطلب كاملاً
+            
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${AUTH_TOKEN}` },
             body: JSON.stringify({ video_url: url })
         })
