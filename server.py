@@ -1,6 +1,5 @@
 import subprocess
 from flask import Flask, render_template, request, jsonify
-import os
 
 
 app = Flask(__name__)
@@ -68,6 +67,5 @@ def mute():
 def reboot():
     result = subprocess.run(["adb", "reboot"], capture_output=True, text=True)
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))  # Render يحدد المنفذ تلقائيًا
-    app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
 
