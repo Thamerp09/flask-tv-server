@@ -239,14 +239,16 @@
         function playVideo() {
             const videoUrl = document.getElementById("videoUrl").value.trim();
             if (!videoUrl) {
-                document.getElementById("status").innerText = "❌ الرجاء إدخال رابط فيديو!";
+                document.getElementById("status").innerText = "Please put the link !";
                 return;
             }
-            document.getElementById("status").innerText = "⏳ جارٍ تشغيل الفيديو...";
+            document.getElementById("status").innerText = "Running...";
 
             fetch(`${NGROK_URL}/play`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                mode: "cors",
+                credentials: "include", 
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${AUTH_TOKEN}`},
                 body: JSON.stringify({ video_url: videoUrl })
             })
             .then(response => response.json())
