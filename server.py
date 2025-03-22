@@ -20,10 +20,7 @@ def play_video():
 
     # أمر تشغيل الفيديو عبر يوتيوب
     adb_command = [
-        "adb", "-s", f"{TV_IP}:5555", "shell", "am", "start",
-        "-n", "com.google.android.youtube.tv/com.google.android.youtube.tv.activity.ShellActivity",
-        "-a", "android.intent.action.VIEW",
-        "-d", video_url
+        "adb", "-s", f"{TV_IP}:5555", "shell", "am", "start" "-a", "android.intent.action.VIEW", "-d", video_url
     ]
 
     result = subprocess.run(adb_command, capture_output=True, text=True)
@@ -71,3 +68,17 @@ def reboot():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
+
+
+
+# git add .
+# git commit - m "any meassage"
+# git push
+
+
+
+# command to open video
+# "adb", "-s", f"{TV_IP}:5555", "shell", "am", "start",
+#         "-n", "com.google.android.youtube.tv/com.google.android.youtube.tv.activity.ShellActivity",
+#         "-a", "android.intent.action.VIEW",
+#         "-d", video_url
