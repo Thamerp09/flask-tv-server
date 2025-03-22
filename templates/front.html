@@ -222,7 +222,15 @@
     <button onclick="changeVolume('down')">-</button>
     <button onclick="changeVolume('mute')">mute</button>
     <br>
-    <button onclick="rebootTV()">🔄 إعادة تشغيل التلفزيون</button>
+    <p id="statusE">📺</p>
+    <p id="status"></p>
+    <h2>Some Channels</h2>
+    <hr style="width: 50%;">
+
+    <button onclick="playPresetVideo(this)" id="f" data-url="https://www.youtube.com/watch?v=bNyUyrR0PHo&ab_channel=AlJazeeraArabic%D9%82%D9%86%D8%A7%D8%A9%D8%A7%D9%84%D8%AC%D8%B2%D9%8A%D8%B1%D8%A9https://www.youtube.com/watch?v=PVHVV6pzz3U&ab_channel=%D8%A7%D8%A8%D9%88%D9%85%D8%AD%D8%B3%D9%86">▶ قناة الجزيرة</button>
+    <button onclick="playPresetVideo(this)" data-url="https://www.youtube.com/@osh3lek">▶ قناة ملزلز</button>
+    <br>
+    <button onclick="reboot('reboot')">Reboot The TV</button>
     <p id="status">📺 في انتظار الأوامر...</p>
 
     <script>
