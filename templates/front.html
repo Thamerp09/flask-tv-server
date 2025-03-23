@@ -221,6 +221,8 @@
     <button onclick="changeVolume('up')">+</button>
     <button onclick="changeVolume('down')">-</button>
     <button onclick="changeVolume('mute')">mute</button>
+    <button onclick="fetch(`${NGROK_URL}/mute`, {method: 'POST', headers: {'Authorization': `Bearer ${AUTH_TOKEN}`}}).then(r => r.json()).then(d => console.log(d)).catch(e => console.error(e))">🔇 Test Mute</button>
+
     <br>
     <p id="statusE">📺</p>
     <p id="status"></p>
@@ -253,24 +255,6 @@
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${AUTH_TOKEN}`},
                 body: JSON.stringify({ video_url: videoUrl })
             })
-            // .then(response => response.json())
-            // .then(data => {
-            //     document.getElementById("status").innerText = data.message;
-            // })
-            // .catch(error => {
-            //     document.getElementById("status").innerText = "❌ فشل في إرسال الطلب!";
-            //     console.error("Error:", error);
-            // });
-        }
-
-        function changeVolume(action) {
-            let url = `${NGROK_URL}/volume_${action}`;
-            document.getElementById("status").innerText = `⏳ جارٍ ${action === 'up' ? 'رفع' : action === 'down' ? 'خفض' : 'كتم'} الصوت...`;
-
-            fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' }
-            })
             .then(response => response.json())
             .then(data => {
                 document.getElementById("status").innerText = data.message;
@@ -280,6 +264,25 @@
                 console.error("Error:", error);
             });
         }
+
+         function changeVolume(action) {
+        let url = "";
+
+        if (action === 'up') url = `${NGROK_URL}/volume_up`;
+        else if (action === 'down') url = `${NGROK_URL}/volume_down`;
+        else if (action === 'mute') url = `${NGROK_URL}/mute`;
+
+        console.log("🔊 طلب تم إرساله إلى:", url); // ✅ طباعة للتأكد
+
+        fetch(url, {
+            method: 'POST',
+            mode: "cors",  // ✅ تفعيل CORS
+            credentials: "include",  // ✅ التأكد من إرسال الطلب كاملاً
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${AUTH_TOKEN}` }
+        })
+        .then(response => response.json())
+        }
+
 
         function rebootTV() {
             document.getElementById("status").innerText = "⏳ جارٍ إعادة تشغيل التلفزيون...";
@@ -295,6 +298,18 @@
                 document.getElementById("status").innerText = "❌ فشل في إرسال الطلب!";
                 console.error("Error:", error);
             });
+        }
+        function playPresetVideo(button) {
+            let url = button.getAttribute("data-url");
+            document.getElementById("status").innerText = "🎬 تم التشغيل";
+
+            fetch(`${NGROK_URL}/play`, {
+                method: 'POST',
+                mode: "cors",  // ✅ تفعيل CORS
+                credentials: "include",  // ✅ التأكد من إرسال الطلب كاملاً
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${AUTH_TOKEN}` },
+                body: JSON.stringify({ video_url: url })
+            })
         }
     </script>
 </body>

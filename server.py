@@ -2,28 +2,34 @@ import subprocess
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS  # ✅ استيراد CORS
 
+
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, supports_credentials=True)
 TV_IP = "192.168.100.3"  # استبدله بعنوان تلفزيونك
 
 @app.route('/')
 def home():
     return render_template('front.html')
-
 @app.route('/play', methods=['POST'])
 def play_video():
     data = request.json
     video_url = data.get("video_url")
-
+    print("📥 البيانات المستلمة:", data)
     if not video_url:
         return jsonify({"message": "❌ يرجى إدخال رابط فيديو صحيح!"}), 400
 
-    # أمر تشغيل الفيديو عبر يوتيوب
     adb_command = [
-        "adb", "-s", f"{TV_IP}:5555", "shell", "am", "start" "-a", "android.intent.action.VIEW", "-d", video_url
+        "adb", "-s", f"{TV_IP}:5555", "shell", "am", "start",
+        "-a", "android.intent.action.VIEW",
+        "-d", video_url
     ]
 
+    print("📺 تشغيل الفيديو بالأمر:", " ".join(adb_command))  # ✅ نطبع الأمر
+
     result = subprocess.run(adb_command, capture_output=True, text=True)
+
+    print("📤 stderr:", result.stderr)  # ✅ نطبع الرد
+    print("📤 return code:", result.returncode)
 
     if result.returncode == 0:
         return jsonify({"message": f"✅ تم تشغيل الفيديو: {video_url}"})
@@ -82,3 +88,6 @@ if __name__ == '__main__':
 #         "-n", "com.google.android.youtube.tv/com.google.android.youtube.tv.activity.ShellActivity",
 #         "-a", "android.intent.action.VIEW",
 #         "-d", video_url
+
+
+        # "adb", "-s", f"{TV_IP}:5555", "shell", "am", "start" "-a", "android.intent.action.VIEW", "-d", video_url
