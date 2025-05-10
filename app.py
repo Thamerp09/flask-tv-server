@@ -72,6 +72,9 @@ def reboot():
 @app.route('/services')
 def services():
     return render_template('services.html')
+@app.route('/MainMenu')
+def services():
+    return render_template('MainMenu.html')
 
 
 if __name__ == '__main__':
