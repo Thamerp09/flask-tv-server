@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Conventor</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="card">
+    <h1>Currency Conventor</h1>
+
+    <input type="number" id="amount" placeholder="Enter amount"><br><br>
+    <select name="" id="FromCurrency">
+        <option value="USD">USD</option>
+        <option value="SAR">SAR</option>
+        <option value="EUR">EUR</option>
+    </select>
+
+    <select name="" id="ToCurrency">
+        <option value="USD">USD</option>
+        <option value="SAR">SAR</option>
+        <option value="EUR">EUR</option>
+    </select>
+    <br>  
+    <button onclick="convert()">Convert</button>
+    <h2 id="result">Result: </h2>
+    </div>
+</body>
+<script>
+async function convert() {
+  const amountInput = document.getElementById("amount");
+  const fromCurrencySelect = document.getElementById("FromCurrency");
+  const toCurrencySelect = document.getElementById("ToCurrency");
+  const resultElement = document.getElementById("result");
+
+  // --------------------------------------------------------------------
+  // !!! هام جداً: استبدل "YOUR_ACTUAL_API_KEY" بمفتاح API الحقيقي !!!
+  // --------------------------------------------------------------------
+  const apiKey = "e2e3c8a326c999a6e65b04d6da06002f"; // <--- ضع مفتاحك هنا
+
+  const amount = parseFloat(amountInput.value); // تحويل القيمة إلى رقم
+  const from = fromCurrencySelect.value;
+  const to = toCurrencySelect.value;
+
+  // 1. التحقق من صحة المبلغ
+  if (isNaN(amount) || amount <= 0) {
+    resultElement.innerText = "❌ Please enter a valid positive amount.";
+    return;
+  }
+
+  // 2. إذا كانت العملات متطابقة
+  if (from === to) {
+    resultElement.innerText = `✅ ${amount.toFixed(2)} ${from} = ${amount.toFixed(2)} ${to}`;
+    return;
+  }
+
+  // 3. تكوين رابط الـ API
+  const url = `https://api.exchangerate.host/convert?access_key=${apiKey}&from=${from}&to=${to}&amount=${amount}`;
+  
+  resultElement.innerText = "⏳ Converting..."; // رسالة انتظار
+
+  try {
+    // 4. إرسال الطلب إلى الـ API
+    const response = await fetch(url);
+    const data = await response.json(); // محاولة قراءة الرد كـ JSON
+
+    // 5. التحقق من نجاح الرد من الـ API
+    // API مثل exchangerate.host عادةً ما ترسل `data.success === true` عند النجاح
+    // و `data.result` يحتوي على القيمة المحولة
+    if (data && data.success === true && typeof data.result === "number") {
+      resultElement.innerText = `✅ ${amount.toFixed(2)} ${from} = ${data.result.toFixed(2)} ${to}`;
+    } else {
+      // إذا لم تنجح العملية (مثلاً: مفتاح API خطأ، عملة غير مدعومة، إلخ)
+      // نحاول عرض رسالة الخطأ من الـ API إذا كانت موجودة
+      let errorMessage = "❌ Conversion failed.";
+      if (data && data.error && data.error.info) {
+        errorMessage = `❌ Error: ${data.error.info}`;
+      } else if (!response.ok) {
+        // إذا كان هناك خطأ في HTTP نفسه (مثل 404, 500)
+        errorMessage = `❌ HTTP error! Status: ${response.status}`;
+      }
+      resultElement.innerText = errorMessage;
+      console.log("API Response (failure or unexpected):", data); // اطبع الرد للمساعدة في التشخيص
+    }
+
+  } catch (error) {
+    // 6. هذا يلتقط أخطاء الشبكة (مثل عدم وجود اتصال بالإنترنت)
+    // أو إذا فشلت `response.json()` (مثلاً الرد لم يكن JSON صالح)
+    console.error("Fetch/Network Error:", error);
+    resultElement.innerText = "❌ Something went wrong. Check your internet connection or the console.";
+  }
+}
+</script>
+</html>
