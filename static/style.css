@@ -372,3 +372,241 @@ body.dark-mode .theme-toggle-button .icon-moon {
         height: 22px;
     }
 }
+/* ... (كود CSS السابق للمتغيرات العامة، body, card, typography, form elements، إلخ. يبقى كما هو) ... */
+
+/* --- STYLING FOR REGULAR BUTTONS AND BUTTON-LIKE LINKS --- */
+.button-link,
+button.regular-button { /* استهدف فئة .regular-button للأزرار العادية و .button-link للروابط */
+    display: inline-block; /* Or 'block' if you want them full-width by default on their own line */
+    padding: 0.75em 1.75em;  /* Padding: vertical, horizontal. Adjust for size. */
+    margin: 8px 5px;       /* Margin around each button */
+    
+    font-family: inherit;  /* Inherit global font */
+    font-size: clamp(0.85rem, 2.2vw, 0.95rem); /* Responsive font size */
+    font-weight: 600; /* Bold or semi-bold */
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    line-height: 1.5; /* Good for button text readability */
+    
+    color: var(--button-text-color); /* Uses CSS variable for text color */
+    background-color: var(--button-background-color); /* Uses CSS variable for background */
+    
+    border: 1px solid transparent; /* Start with a transparent border */
+    /* Optional: if you want a border that matches the background or is slightly darker */
+    /* border-color: color-mix(in srgb, var(--button-background-color) 85%, black); */
+    
+    border-radius: 8px;      /* Rounded corners */
+    
+    text-align: center;
+    text-decoration: none;   /* Removes underline from <a> tags with .button-link */
+    cursor: pointer;
+    
+    box-shadow: 0 2px 5px var(--shadow-color), /* Softer shadow */
+                0 1px 1px color-mix(in srgb, var(--shadow-color) 50%, transparent);
+    
+    transition: background-color 0.25s ease, 
+                transform 0.15s ease, 
+                box-shadow 0.25s ease,
+                border-color 0.25s ease;
+    
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    min-width: 130px; /* Minimum width for buttons */
+    appearance: none; /* Reset default browser appearance for buttons */
+    -webkit-appearance: none;
+}
+
+/* --- Hover and Focus States --- */
+.button-link:hover,
+button.regular-button:hover {
+    background-color: var(--button-hover-background-color); /* Use variable for hover background */
+    color: var(--button-text-color); /* Ensure text color remains good */
+    box-shadow: 0 4px 10px color-mix(in srgb, var(--button-hover-background-color) 30%, transparent), /* Enhanced shadow on hover */
+                0 2px 4px var(--shadow-color);
+    transform: translateY(-2px); /* Slight lift effect */
+}
+
+.button-link:focus,
+button.regular-button:focus {
+    background-color: var(--button-hover-background-color);
+    color: var(--button-text-color);
+    outline: 2px solid var(--link-color); /* Focus outline using link color variable */
+    outline-offset: 2px;
+    box-shadow: 0 4px 10px color-mix(in srgb, var(--button-hover-background-color) 30%, transparent),
+                0 2px 4px var(--shadow-color);
+}
+.button-link:focus:not(:focus-visible), /* Remove outline if focus is not keyboard initiated */
+button.regular-button:focus:not(:focus-visible) {
+    outline: none;
+}
+
+
+/* --- Active (Pressed) State --- */
+.button-link:active,
+button.regular-button:active {
+    background-color: color-mix(in srgb, var(--button-hover-background-color) 85%, black); /* Slightly darker when pressed */
+    transform: translateY(0px) scale(0.97); /* Push down and slightly shrink */
+    box-shadow: 0 1px 3px var(--shadow-color); /* Minimal shadow when pressed */
+}
+
+/* --- Disabled State (Optional, but good practice) --- */
+.button-link:disabled,
+button.regular-button:disabled {
+    background-color: color-mix(in srgb, var(--button-background-color) 50%, #88888880); /* More muted background */
+    color: color-mix(in srgb, var(--button-text-color) 60%, #88888880); /* Muted text */
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+
+/* --- Ensure these variables are defined in :root and body.dark-mode --- */
+/* Example of how they should be defined (you already have these) */
+/*
+:root {
+    --button-text-color: #ffffff;
+    --button-background-color: #007bff; // Light mode button blue
+    --button-hover-background-color: #0056b3;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --link-color: #007bff;
+}
+
+body.dark-mode {
+    --button-text-color: #ffffff;
+    --button-background-color: rgba(0, 191, 255, 0.7); // Dark mode button cyan
+    --button-hover-background-color: rgba(0, 191, 255, 0.9);
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --link-color: #00bfff;
+}
+*/
+
+/* ... (بقية كود CSS الخاص بك MEDIA QUERIES, theme-toggle-button إلخ) ... */
+
+/* --- تعديل في Media Queries إذا لزم الأمر للأزرار العادية --- */
+@media (max-width: 600px) {
+    /* ... (قواعدك الحالية) ... */
+
+    /* تعديل الأزرار العادية والروابط التي تشبه الأزرار على الجوال */
+    .button-link, 
+    button.regular-button {
+        display: block; /* يجعل كل زر/رابط في سطر خاص به */
+        width: 90%;    /* أو 100% إذا أردت أن يملأ عرض الكارد */
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 12px; /* زيادة الهامش العلوي والسفلي قليلاً */
+        margin-bottom: 12px;
+        padding: 0.8em 1em;
+    }
+
+    /* لضمان المسافات بين الأزرار والروابط المكدسة */
+    .card button.regular-button + button.regular-button,
+    .card .button-link + .button-link,
+    .card button.regular-button + .button-link,
+    .card .button-link + button.regular-button {
+        margin-top: 12px; /* تباعد موحد */
+    }
+}/* ... (كود CSS السابق للمتغيرات العامة، body, card, typography, form elements، إلخ. يبقى كما هو) ... */
+
+/* --- STYLING FOR REGULAR BUTTONS --- */
+/* نستهدف جميع الأزرار باستثناء تلك التي لديها فئة .theme-toggle-button */
+button:not(.theme-toggle-button) {
+    display: inline-block;
+    padding: 0.75em 1.75em;
+    margin: 8px 5px;
+    
+    font-family: inherit;
+    font-size: clamp(0.85rem, 2.2vw, 0.95rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    line-height: 1.5;
+    
+    color: var(--button-text-color);
+    background-color: var(--button-background-color);
+    
+    border: 1px solid transparent;
+    /* يمكنك تفعيل هذا إذا أردت حدًا مرئيًا بلون متناسق */
+    /* border-color: color-mix(in srgb, var(--button-background-color) 85%, black); */
+    
+    border-radius: 8px;
+    
+    text-align: center;
+    cursor: pointer;
+    
+    box-shadow: 0 2px 5px var(--shadow-color),
+                0 1px 1px color-mix(in srgb, var(--shadow-color) 50%, transparent);
+    
+    transition: background-color 0.25s ease, 
+                transform 0.15s ease, 
+                box-shadow 0.25s ease,
+                border-color 0.25s ease;
+    
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    min-width: 130px;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+/* --- Hover and Focus States for Regular Buttons --- */
+button:not(.theme-toggle-button):hover {
+    background-color: var(--button-hover-background-color);
+    color: var(--button-text-color);
+    box-shadow: 0 4px 10px color-mix(in srgb, var(--button-hover-background-color) 30%, transparent),
+                0 2px 4px var(--shadow-color);
+    transform: translateY(-2px);
+}
+
+button:not(.theme-toggle-button):focus {
+    background-color: var(--button-hover-background-color);
+    color: var(--button-text-color);
+    outline: 2px solid var(--link-color);
+    outline-offset: 2px;
+    box-shadow: 0 4px 10px color-mix(in srgb, var(--button-hover-background-color) 30%, transparent),
+                0 2px 4px var(--shadow-color);
+}
+button:not(.theme-toggle-button):focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* --- Active (Pressed) State for Regular Buttons --- */
+button:not(.theme-toggle-button):active {
+    background-color: color-mix(in srgb, var(--button-hover-background-color) 85%, black);
+    transform: translateY(0px) scale(0.97);
+    box-shadow: 0 1px 3px var(--shadow-color);
+}
+
+/* --- Disabled State for Regular Buttons (Optional) --- */
+button:not(.theme-toggle-button):disabled {
+    background-color: color-mix(in srgb, var(--button-background-color) 50%, #88888880);
+    color: color-mix(in srgb, var(--button-text-color) 60%, #88888880);
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+/* ... (بقية كود CSS الخاص بك للمتغيرات، Media Queries, theme-toggle-button إلخ) ... */
+
+/* --- تعديل في Media Queries إذا لزم الأمر للأزرار العادية --- */
+@media (max-width: 600px) {
+    /* ... (قواعدك الحالية) ... */
+
+    button:not(.theme-toggle-button) { /* تطبيق التعديلات على الأزرار العادية فقط */
+        display: block;
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 12px;
+        margin-bottom: 12px;
+        padding: 0.8em 1em;
+    }
+
+    /* لضمان المسافات بين الأزرار المكدسة */
+    .card button:not(.theme-toggle-button) + button:not(.theme-toggle-button) {
+        margin-top: 12px;
+    }
+}
