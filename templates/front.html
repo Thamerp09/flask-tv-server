@@ -201,9 +201,21 @@
         .status{
             font-size: 100px;
         }
+
+        .card {
+            background-color: rgba(157, 157, 157, 0.487); /* لون خلفية داكن */
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 700px;
+            margin: auto;
+            box-shadow: 0 8px 32px rgba(255, 237, 237, 0.959);
+            text-align: center;
+        }
+
     </style>
 </head>
 <body>
+    <div class="card">
     <h1>
         <span>H</span>
         <span>E</span>
@@ -213,7 +225,6 @@
         <span>!</span>
     </h1>
     <h1>Play video on TV</h1>
-    <h1>dfdf</h1>
     <input type="text" id="videoUrl" placeholder="Put the link here">
     <br>
     <button onclick="playVideo()">▶ Start Video </button>
@@ -236,7 +247,7 @@
     <button onclick="reboot('reboot')">Reboot The TV</button>
     <p id="status">📺 في انتظار الأوامر...</p>
     <button onclick="window.location.href='/services'">Some Services</button>
-
+    </div>
     <script src="main.js"></script>
 </body>
 </html>
