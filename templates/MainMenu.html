@@ -14,10 +14,8 @@
     <h2>Hi I'm Thamer<br>Welcome to my Project Hub</h2><br>
     <h2>Here some of the project i've built</h2>
 
-
-    <button onclick="window.location.href = '{{ url_for('tv_control_page') }}';">Control TV Through Server</button>
-    <button onclick="window.location.href = '{{ url_for('currency_converter_page') }}';">Currency Conventor</button>
-    
+    <a href="{{ url_for('tv_control_page') }}" class="button-link">Control TV Through Server</a>
+    <a href="{{ url_for('currency_converter_page') }}" class="button-link">Currency Conventor</a>
 
     <button onclick='window.open("https://ed56-2001-16a2-f715-3100-4c7e-d8c5-6083-8c6f.ngrok-free.app","_blank")'>Open savings</button>
     </div>
