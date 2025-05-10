@@ -86,6 +86,13 @@ def reboot():
     else:
         return jsonify({"message": "❌ فشل في إعادة تشغيل التلفزيون", "error": result.stderr})
 
+@app.route('/tv_control')
+def tv_control_page():
+    return render_template("front.html")
+
+@app.route('/currency_conventor')
+def currency_conventor_page():
+    return render_template("CurrencyConventor.html")
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
