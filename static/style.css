@@ -2,27 +2,68 @@
 *,
 *::before,
 *::after {
-    box-sizing: border-box; /* يضمن أن padding و border لا تزيد من حجم العنصر */
-    margin: 0;             /* إزالة الهوامش الافتراضية */
-    padding: 0;            /* إزالة الحشو الافتراضي */
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
+/* --- CSS VARIABLES FOR THEMEING --- */
+:root {
+    /* Light Mode (Default) */
+    --background-color: #f0f2f5;
+    --card-background-color: rgba(255, 255, 255, 0.95);
+    --text-color: #1c1e21; /* لون النص الأساسي للوضع النهاري */
+    --secondary-text-color: #606770;
+    --button-background-color: #007bff;
+    --button-text-color: #ffffff;
+    --button-hover-background-color: #0056b3;
+    --link-color: #007bff;
+    --border-color: rgba(0, 0, 0, 0.1);
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --input-background: #ffffff;
+    --input-border: #ced4da;
+    --input-focus-border: #80bdff;
+    --animated-bg-opacity: 0;
+    --theme-icon-color: #4a5568; /* لون أيقونة الشمس/القمر في الوضع النهاري */
+}
+
+body.dark-mode {
+    /* Dark Mode */
+    --background-color: #1a1a2e; /* تم تعديله ليتطابق مع خلفيتك */
+    --card-background-color: rgba(35, 35, 55, 0.75); /* مثل ما كان لديك */
+    --text-color: #e4e6eb; /* لون النص الأساسي للوضع الليلي */
+    --secondary-text-color: #b0b3b8;
+    --button-background-color: rgba(0, 191, 255, 0.7);
+    --button-text-color: #ffffff;
+    --button-hover-background-color: rgba(0, 191, 255, 0.9);
+    --link-color: #00bfff;
+    --border-color: rgba(255, 255, 255, 0.15); /* زدنا الشفافية قليلاً */
+    --shadow-color: rgba(0, 0, 0, 0.37); /* مثل ما كان لديك */
+    --input-background: rgba(255, 255, 255, 0.08); /* مثل ما كان لديك */
+    --input-border: rgba(255, 255, 255, 0.2);   /* مثل ما كان لديك */
+    --input-focus-border: var(--link-color);
+    --animated-bg-opacity: 1;
+    --theme-icon-color: #e3e3e3; /* لون أيقونة الشمس/القمر في الوضع الليلي */
+}
+
+/* --- BASE BODY STYLING --- */
 body {
-    font-family: 'Inter', 'Poppins', 'Nunito', 'Roboto', sans-serif; /* ترتيب الخطوط المفضل */
+    font-family: 'Inter', 'Poppins', 'Nunito', 'Roboto', sans-serif;
     text-align: center;
-    color: white;
-    background-color: #1a1a2e; /* لون احتياطي إذا لم تعمل الخلفية المتحركة */
+    background-color: var(--background-color);
+    color: var(--text-color); /* هذا سيؤثر على النص العام */
     padding: 20px;
-    overflow-y: auto; /* السماح بالتمرير العمودي إذا تجاوز المحتوى */
-    position: relative; /* ضروري للخلفية المتحركة */
-    min-height: 100vh; /* التأكد من أن الـ body يملأ ارتفاع الشاشة على الأقل */
-    display: flex; /* للمساعدة في توسيط الكارد عمودياً إذا أردت */
-    flex-direction: column; /* لترتيب العناصر عمودياً */
-    align-items: center; /* توسيط الكارد أفقياً */
-    justify-content: center; /* لتوسيط الكارد عمودياً (إذا لم يكن هناك الكثير من المحتوى) */
+    overflow-y: auto;
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* خلفية متحركة */
+/* Animated background (conditional opacity) */
 body::before {
     content: "";
     position: fixed;
@@ -32,330 +73,302 @@ body::before {
     height: 100%;
     background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #1b1e32);
     background-size: 400% 400%;
-    animation: gradientBG 15s ease infinite; /* زدت المدة قليلاً */
+    animation: gradientBG 15s ease infinite;
     z-index: -1;
+    opacity: var(--animated-bg-opacity);
+    transition: opacity 0.5s ease;
 }
 
 @keyframes gradientBG {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
-    /* تم إزالة transform: scale() من هنا لجعل الحركة أكثر سلاسة على بعض الأجهزة */
 }
 
 /* --- TYPOGRAPHY --- */
 h1 {
-    font-size: clamp(1.8rem, 5vw, 2.5rem); /* حجم خط متجاوب */
+    font-size: clamp(1.8rem, 5vw, 2.5rem);
     margin-bottom: 25px;
-    margin-top: 20px; /* قللت الهامش العلوي قليلاً */
+    margin-top: 20px;
     line-height: 1.2;
+    color: var(--text-color);
 }
 
 h2 {
     font-size: clamp(1.2rem, 4vw, 1.8rem);
     margin-top: 20px;
     margin-bottom: 15px;
-    color: #e0e0e0; /* لون أفتح قليلاً للـ h2 */
+    /* color: #e0e0e0;  تم استبداله بـ var(--text-color) أو var(--secondary-text-color) */
+    color: var(--text-color);
 }
 
 p {
     font-size: clamp(0.9rem, 2.5vw, 1rem);
     line-height: 1.6;
     margin-bottom: 15px;
+    color: var(--text-color);
 }
 
 /* --- CARD STYLING --- */
 .card {
-    background-color: rgba(35, 35, 55, 0.5); /* لون أغمق قليلاً وأكثر شفافية للكارد */
-    border-radius: 20px; /* انحناء أكبر للحواف */
-    padding: clamp(20px, 5vw, 40px); /* حشو متجاوب */
+    background-color: var(--card-background-color);
+    border-radius: 20px;
+    padding: clamp(20px, 5vw, 40px);
     width: 90%;
-    max-width: 650px; /* يمكن زيادة هذا إذا أردت عرضًا أكبر على الكمبيوتر */
-    margin: 20px auto; /* هامش تلقائي للتوسيط */
-    
+    max-width: 650px;
+    margin: 20px auto;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 8px 24px var(--shadow-color);
+    text-align: center;
+    overflow: hidden;
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+body.dark-mode .card {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37); /* ظل أكثر بروزًا قليلاً */
-    text-align: center;
-    overflow: hidden; /* لمنع أي تجاوزات من العناصر الداخلية */
 }
 
-/* --- FORM ELEMENTS (INPUT, SELECT, BUTTON) --- */
+
+/* --- FORM ELEMENTS --- */
 input[type="text"],
 input[type="number"],
 select {
-    font-family: inherit; /* ليرث الخط من body */
+    font-family: inherit;
     font-size: clamp(0.9rem, 2.5vw, 1rem);
     padding: 12px 15px;
-    width: 100%; /* جعلها تملأ عرض الكارد */
-    max-width: 450px; /* عرض أقصى على الشاشات الكبيرة */
-    margin-bottom: 15px; /* مسافة بين العناصر */
+    width: 100%;
+    max-width: 450px;
+    margin-bottom: 15px;
     border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    background-color: rgba(255, 255, 255, 0.08);
-    color: #f0f0f0;
+    border: 1px solid var(--input-border);
+    background-color: var(--input-background);
+    color: var(--text-color);
     outline: none;
-    transition: border-color 0.3s ease, background-color 0.3s ease;
+    transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 input[type="text"]::placeholder,
 input[type="number"]::placeholder {
-    color: rgba(255, 255, 255, 0.5);
+    color: color-mix(in srgb, var(--text-color) 50%, transparent);
 }
 
 input[type="text"]:focus,
 input[type="number"]:focus,
 select:focus {
-    border-color: #00bfff; /* DeepSkyBlue */
-    background-color: rgba(255, 255, 255, 0.12);
+    border-color: var(--input-focus-border);
+    box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--input-focus-border) 25%, transparent);
 }
 
 select {
     appearance: none;
     -webkit-appearance: none;
-    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
     background-repeat: no-repeat;
     background-position: right 15px center;
-    background-size: 12px;
-    padding-right: 40px; /* مساحة كافية للسهم */
+    background-size: 10px;
+    padding-right: 40px;
+}
+/* Select arrow color */
+body:not(.dark-mode) select {
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23555555%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+}
+body.dark-mode select {
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
 }
 
-button {
+
+/* --- BUTTONS & BUTTON-LIKE LINKS --- */
+/* القاعدة العامة للأزرار والروابط التي تشبه الأزرار */
+.button-link,
+button.regular-button { /* سنستخدم .regular-button للأزرار العادية غير زر التبديل */
+    display: inline-block;
+    padding: 0.7em 1.8em;
+    margin: 8px 5px;
     font-family: inherit;
-    font-size: clamp(0.9rem, 2.5vw, 1rem);
-    letter-spacing: 1px;
-    text-transform: uppercase;
+    font-size: clamp(0.85rem, 2.2vw, 0.95rem);
     font-weight: bold;
-    padding: 12px 25px;
-    margin-top: 10px;
-    margin-bottom: 10px; /* توحيد الهامش السفلي */
-    margin-left: 5px; /* إضافة هوامش جانبية إذا كانت الأزرار بجانب بعضها */
-    margin-right: 5px;
-    
-    color: #ffffff;
-    background-color: rgba(0, 191, 255, 0.7); /* DeepSkyBlue with transparency */
-    border: 1px solid rgba(0, 191, 255, 0.9);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--button-text-color);
+    background-color: var(--button-background-color);
+    border: 1px solid var(--button-background-color);
     border-radius: 8px;
+    text-align: center;
+    text-decoration: none;
     cursor: pointer;
-    position: relative;
-    
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15), 
-                0 1px 2px rgba(0, 0, 0, 0.1);
-    
+    box-shadow: 0 3px 8px var(--shadow-color),
+                0 1px 2px var(--shadow-color);
     transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-    overflow: hidden; 
-    z-index: 1;
-    min-width: 120px; /* عرض أدنى للزر */
+    user-select: none;
+    -webkit-user-select: none;
+    min-width: 120px;
 }
 
-button:hover, button:focus {
-    background-color: rgba(0, 191, 255, 0.9);
-    box-shadow: 0 5px 15px rgba(0, 191, 255, 0.4),
-                0 2px 5px rgba(0, 0, 0, 0.15);
+.button-link:hover,
+button.regular-button:hover,
+.button-link:focus,
+button.regular-button:focus {
+    background-color: var(--button-hover-background-color);
+    color: var(--button-text-color);
+    box-shadow: 0 5px 15px color-mix(in srgb, var(--button-background-color) 30%, transparent),
+                0 2px 5px var(--shadow-color);
+    transform: translateY(-2px);
     outline: none;
-    transform: translateY(-2px); /* حركة طفيفة للأعلى عند المرور */
 }
 
-button:active {
-    transform: translateY(0px) scale(0.97); /* رجوع للحركة وإضافة تصغير طفيف */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.button-link:active,
+button.regular-button:active {
+    background-color: color-mix(in srgb, var(--button-hover-background-color) 90%, black);
+    transform: translateY(0px) scale(0.97);
+    box-shadow: 0 2px 5px var(--shadow-color);
 }
 
-/* --- SPECIFIC ELEMENTS --- */
-#result {
+
+/* --- SPECIFIC ELEMENTS (Result, Status, HR) --- */
+#result, #status {
     font-size: clamp(1.1rem, 3vw, 1.4rem);
     margin-top: 25px;
     font-weight: bold;
     min-height: 30px;
-    word-break: break-word; /* لمنع تجاوز النص الطويل */
+    word-break: break-word;
+    color: var(--text-color);
 }
+#status { color: var(--secondary-text-color); }
 
 #statusE {
-    font-size: clamp(3rem, 10vw, 4rem); /* حجم أيقونة متجاوب */
+    font-size: clamp(3rem, 10vw, 4rem);
     color: #ffcc00;
     margin-top: 20px;
     margin-bottom: 20px;
     transition: transform 0.3s ease-in-out;
 }
-#statusE:hover{
-    transform: scale(1.2); /* تقليل التكبير قليلاً ليكون أكثر سلاسة */
-}
-
-#status { /* هذا هو عنصر <p> في الصفحة الثانية */
-    color: #b0b0b0; /* لون رمادي فاتح للمعلومات الثانوية */
-}
+#statusE:hover { transform: scale(1.2); }
 
 hr {
     border: none;
     height: 1px;
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: var(--border-color);
     margin-top: 20px;
     margin-bottom: 20px;
-    width: 70%; /* جعل الخطوط الفاصلة أعرض قليلاً */
+    width: 70%;
 }
 
-/* --- ANIMATIONS & EFFECTS --- */
-/* Span bounce animation (from your original code) */
-h1 span { /* استهداف span داخل h1 فقط */
+/* --- ANIMATIONS & EFFECTS (H1 Span Bounce) --- */
+h1 span {
     position:relative;
-    /* font-family: "lato",sans-serif; /* يمكن إزالته إذا كان الخط موروثًا بشكل صحيح */
-    top: 0; /* ابدأ من 0 */
-    color: #f517ab;
-    display: inline-block; /* ضروري للـ transform */
-    font-size: 1em; /* ليرث حجم الخط من h1 الرئيسي */
-    text-shadow: 0 1px 0 #b7b7b7, 0 2px 0 #b7b7b7, 0 3px 0 #b7b7b7,
-                 0 4px 0 #b7b7b7, 0 5px 0 #b7b7b7, 0 6px 0 transparent, 
-                 0 7px 0 transparent, 0 8px 0 transparent, 0 9px 0 transparent,
-                 0 10px 10px rgba(0, 0, 0, 0.4); /* قللت شفافية الظل الأخير */
-    animation: bounce 0.6s ease-in-out infinite alternate; /* أبطأت الحركة قليلاً */
+    top: 0;
+    color: var(--link-color); /* Use link color or a specific accent */
+    display: inline-block;
+    font-size: 1em;
+    text-shadow: 0 1px 0 var(--secondary-text-color), 0 2px 0 var(--secondary-text-color),
+                 0 5px 8px rgba(0,0,0,0.2);
+    animation: bounce 0.7s ease-in-out infinite alternate;
 }
-
 h1 span:nth-child(2){ animation-delay:0.05s ; }
 h1 span:nth-child(3){ animation-delay:0.1s ; }
 h1 span:nth-child(4){ animation-delay:0.15s; }
 h1 span:nth-child(5){ animation-delay:0.2s; }
 h1 span:nth-child(6){ animation-delay:0.25s; }
-/* يمكنك إضافة المزيد إذا كان لديك أكثر من 6 حروف */
 
 @keyframes bounce {
     100%{
-        top: -10px; /* قللت مسافة القفز */
-        text-shadow: 0 1px 0 #ccc, 0 2px 0 #ccc, 0 3px 0 #ccc,
-                     0 4px 0 #ccc, 0 5px 0 #ccc, 0 6px 0 #ccc, 0 7px 0 #ccc,
-                     0 8px 0 #ccc, 0 9px 0 #ccc,0 30px 20px rgba(0, 0, 0, 0.2); /* ظل أكثر نعومة */
+        top: -8px;
+        text-shadow: 0 1px 0 var(--secondary-text-color), 0 2px 0 var(--secondary-text-color),
+                     0 15px 10px rgba(0,0,0,0.1);
     }
-}  
+}
+
+/* --- THEME TOGGLE BUTTON (Using SVGs in HTML) --- */
+.theme-toggle-button {
+    background: none;
+    border: none;
+    padding: 6px; /* قللنا الحشو قليلاً */
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--theme-icon-color); /* استخدام متغير للون الأيقونة */
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    z-index: 1000;
+    border-radius: 50%; /* لجعله دائريًا إذا أردت له خلفية لاحقًا */
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+.theme-toggle-button:hover {
+    /* يمكنك إضافة تأثير عند المرور، مثل تغيير طفيف في اللون أو الحجم */
+    /* color: var(--link-color); */
+    transform: scale(1.1);
+}
+.theme-toggle-button:focus {
+    outline: 2px solid var(--link-color); /* إضافة إطار عند التركيز */
+    outline-offset: 2px;
+}
+
+.theme-toggle-button svg {
+    width: 24px;
+    height: 24px;
+    transition: opacity 0.3s ease, display 0s linear 0.3s; /* تأخير إخفاء display */
+}
+
+/* الوضع الافتراضي (النهاري): إظهار الشمس، إخفاء القمر */
+.theme-toggle-button .icon-moon {
+    display: none;
+}
+.theme-toggle-button .icon-sun {
+    display: inline-block; /* أو block/flex حسب الحاجة */
+}
+
+/* الوضع الليلي: إظهار القمر، إخفاء الشمس */
+body.dark-mode .theme-toggle-button .icon-sun {
+    display: none;
+}
+body.dark-mode .theme-toggle-button .icon-moon {
+    display: inline-block; /* أو block/flex */
+}
 
 /* --- MEDIA QUERIES FOR RESPONSIVENESS --- */
 @media (max-width: 768px) {
-    /* تعديلات للشاشات المتوسطة (Tablets) */
-    .card {
-        padding: clamp(20px, 4vw, 30px);
-        max-width: 90%; /* اسمح للكارد بأخذ عرض أكبر */
-    }
-    
-    h1 {
-        margin-top: 15px;
-    }
-
-    input[type="text"],
-    input[type="number"],
-    select,
-    button {
+    .card { padding: clamp(20px, 4vw, 30px); max-width: 90%; }
+    h1 { margin-top: 15px; }
+    input[type="text"], input[type="number"], select, button.regular-button, .button-link {
         font-size: clamp(0.85rem, 2.2vw, 0.95rem);
         padding: 10px 15px;
     }
-    
-    button {
-        padding: 10px 20px; /* حشو أقل قليلاً للأزرار */
-    }
+    button.regular-button, .button-link { padding: 10px 20px; }
 }
 
-@media (max-width: 480px) {
-    /* تعديلات للشاشات الصغيرة (Mobiles) */
-    body {
-        padding: 10px; /* حشو أقل للـ body */
-    }
-
-    .card {
-        width: 95%; /* الكارد يأخذ تقريبًا كامل عرض الشاشة */
-        padding: 20px;
-        margin-top: 15px;
-        margin-bottom: 15px;
-    }
-
-    h1 {
-        font-size: clamp(1.5rem, 6vw, 2rem);
-        margin-bottom: 20px;
-    }
-
-    input[type="text"],
-    input[type="number"],
-    select,
-    button {
-        width: 100%; /* اجعلها تملأ عرض الكارد بالكامل */
-        max-width: none; /* إزالة العرض الأقصى */
-        margin-left: 0;
-        margin-right: 0;
-    }
-
-    /* إذا أردت ترتيب الأزرار عمودياً على الجوال */
-    .card button + button { /* يستهدف الأزرار التي تلي بعضها */
-        margin-top: 10px; 
-    }
-    /* أو استخدام flexbox على الحاوية إذا كانت لديك مجموعة أزرار محددة */
-}
-
-
-/* --- Base Button Styling (for .button-link class) --- */
-.button-link {
-    display: inline-block; /* Allows padding, margin, and prevents it from taking full width unless specified */
-    padding: 0.7em 1.8em;  /* Adjust padding to your liking (top/bottom, left/right) */
-    margin: 8px 5px;       /* Margin around each button (top/bottom, left/right) */
-    
-    font-family: inherit;  /* Inherit font from parent, or specify one like 'Inter', 'Poppins', sans-serif */
-    font-size: clamp(0.85rem, 2.2vw, 0.95rem); /* Responsive font size */
-    font-weight: bold;
-    text-transform: uppercase; /* Optional: makes text uppercase */
-    letter-spacing: 1px;     /* Optional: spacing between letters */
-    color: #ffffff;          /* Text color - white for good contrast on dark/colored buttons */
-    
-    background-color: rgba(0, 191, 255, 0.7); /* Default button background (e.g., DeepSkyBlue with transparency) */
-    /* Alternative colors you might like: */
-    /* background-color: rgba(26, 141, 248, 0.8); /* A slightly different blue */
-    /* background-color: rgba(76, 175, 80, 0.8); /* Green */
-    
-    border: 1px solid rgba(0, 191, 255, 0.9); /* Border color, slightly more opaque than background */
-    border-radius: 8px;      /* Rounded corners */
-    
-    text-align: center;
-    text-decoration: none;   /* Crucial: removes underline from links */
-    cursor: pointer;
-    
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15), 
-                0 1px 2px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    
-    transition: background-color 0.3s ease, 
-                transform 0.2s ease, 
-                box-shadow 0.3s ease;
-    
-    /* To prevent text selection when clicking rapidly (optional) */
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-}
-
-/* --- Hover and Focus States --- */
-.button-link:hover,
-.button-link:focus {
-    background-color: rgba(0, 191, 255, 0.9); /* Darken or intensify background on hover/focus */
-    color: #ffffff; /* Ensure text color remains contrasted */
-    box-shadow: 0 5px 15px rgba(0, 191, 255, 0.3), /* More prominent shadow, can be colored */
-                0 2px 5px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px); /* Slight lift effect */
-    outline: none; /* Removes default browser outline on focus, ensure you have other visual cues for focus */
-}
-
-/* --- Active (Pressed) State --- */
-.button-link:active {
-    background-color: rgba(0, 160, 210, 0.9); /* Slightly darker when pressed */
-    transform: translateY(0px) scale(0.97); /* Push down and slightly shrink */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Less shadow when pressed */
-}
-
-/* --- Optional: Full-width buttons on smaller screens --- */
-/* If you want buttons to take full width inside the card on mobile */
 @media (max-width: 600px) {
-    .button-link {
-        display: block; /* Makes each button take its own line and full available width */
-        width: 90%;    /* Or 100% if you prefer, adjust as needed */
+    body { padding: 10px; }
+    .card { width: 95%; padding: 20px; margin-top: 15px; margin-bottom: 15px; }
+    h1 { font-size: clamp(1.5rem, 6vw, 2rem); margin-bottom: 20px; }
+
+    input[type="text"], input[type="number"], select, button.regular-button, .button-link {
+        width: 100%;
+        max-width: none;
         margin-left: auto;
         margin-right: auto;
+    }
+    .button-link, button.regular-button {
+        display: block;
+        width: 90%;
         margin-top: 10px;
         margin-bottom: 10px;
-        padding: 0.8em 1em; /* Adjust padding for mobile if needed */
+    }
+    /* لضمان المسافات بين الأزرار والروابط المكدسة */
+    .card button.regular-button + button.regular-button,
+    .card .button-link + .button-link,
+    .card button.regular-button + .button-link,
+    .card .button-link + button.regular-button {
+        margin-top: 10px;
+    }
+
+    .theme-toggle-button {
+        top: 10px;
+        right: 10px;
+        padding: 5px;
+    }
+    .theme-toggle-button svg {
+        width: 22px; /* تصغير الأيقونة قليلاً على الجوال */
+        height: 22px;
     }
 }
