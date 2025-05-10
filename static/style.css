@@ -287,3 +287,75 @@ h1 span:nth-child(6){ animation-delay:0.25s; }
     }
     /* أو استخدام flexbox على الحاوية إذا كانت لديك مجموعة أزرار محددة */
 }
+
+
+/* --- Base Button Styling (for .button-link class) --- */
+.button-link {
+    display: inline-block; /* Allows padding, margin, and prevents it from taking full width unless specified */
+    padding: 0.7em 1.8em;  /* Adjust padding to your liking (top/bottom, left/right) */
+    margin: 8px 5px;       /* Margin around each button (top/bottom, left/right) */
+    
+    font-family: inherit;  /* Inherit font from parent, or specify one like 'Inter', 'Poppins', sans-serif */
+    font-size: clamp(0.85rem, 2.2vw, 0.95rem); /* Responsive font size */
+    font-weight: bold;
+    text-transform: uppercase; /* Optional: makes text uppercase */
+    letter-spacing: 1px;     /* Optional: spacing between letters */
+    color: #ffffff;          /* Text color - white for good contrast on dark/colored buttons */
+    
+    background-color: rgba(0, 191, 255, 0.7); /* Default button background (e.g., DeepSkyBlue with transparency) */
+    /* Alternative colors you might like: */
+    /* background-color: rgba(26, 141, 248, 0.8); /* A slightly different blue */
+    /* background-color: rgba(76, 175, 80, 0.8); /* Green */
+    
+    border: 1px solid rgba(0, 191, 255, 0.9); /* Border color, slightly more opaque than background */
+    border-radius: 8px;      /* Rounded corners */
+    
+    text-align: center;
+    text-decoration: none;   /* Crucial: removes underline from links */
+    cursor: pointer;
+    
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15), 
+                0 1px 2px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    
+    transition: background-color 0.3s ease, 
+                transform 0.2s ease, 
+                box-shadow 0.3s ease;
+    
+    /* To prevent text selection when clicking rapidly (optional) */
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+/* --- Hover and Focus States --- */
+.button-link:hover,
+.button-link:focus {
+    background-color: rgba(0, 191, 255, 0.9); /* Darken or intensify background on hover/focus */
+    color: #ffffff; /* Ensure text color remains contrasted */
+    box-shadow: 0 5px 15px rgba(0, 191, 255, 0.3), /* More prominent shadow, can be colored */
+                0 2px 5px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px); /* Slight lift effect */
+    outline: none; /* Removes default browser outline on focus, ensure you have other visual cues for focus */
+}
+
+/* --- Active (Pressed) State --- */
+.button-link:active {
+    background-color: rgba(0, 160, 210, 0.9); /* Slightly darker when pressed */
+    transform: translateY(0px) scale(0.97); /* Push down and slightly shrink */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Less shadow when pressed */
+}
+
+/* --- Optional: Full-width buttons on smaller screens --- */
+/* If you want buttons to take full width inside the card on mobile */
+@media (max-width: 600px) {
+    .button-link {
+        display: block; /* Makes each button take its own line and full available width */
+        width: 90%;    /* Or 100% if you prefer, adjust as needed */
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        padding: 0.8em 1em; /* Adjust padding for mobile if needed */
+    }
+}
