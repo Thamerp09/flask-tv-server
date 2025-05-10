@@ -9,7 +9,7 @@ TV_IP = "192.168.100.3"  # استبدله بعنوان تلفزيونك
 
 @app.route('/')
 def home():
-    return render_template('MainMenu.html')
+    return render_template('front.html')
 @app.route('/play', methods=['POST'])
 def play_video():
     data = request.json
