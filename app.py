@@ -1,9 +1,23 @@
 import subprocess
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS  # ✅ استيراد CORS
+import os 
+from whitenoise import WhiteNoise
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_FOLDER = os.path.join(BASE_DIR, 'static')
+TEMPLATE_FOLDER = os.path.join(BASE_DIR, 'templates') # إذا كان مجلد القوالب اسمه templates
 
-app = Flask(__name__, static_folder='static', static_url_path='/static')
+app = Flask(__name__, template_folder=TEMPLATE_FOLDER, static_folder=None)
+# قمنا بتعطيل static_folder الافتراضي لـ Flask لأن WhiteNoise سيتولى الأمر
+
+# --- تكوين WhiteNoise ---
+# WhiteNoise سيخدم الملفات من المجلد الذي تحدده كـ 'root'
+# سيجعل محتويات هذا المجلد متاحة من جذر الموقع ( / )
+app.wsgi_app = WhiteNoise(app.wsgi_app, root=STATIC_FOLDER, prefix='static/')
+# باستخدام prefix='static/'، سيتم خدمة الملفات من /static/your_file.css
+# مثال: STATIC_FOLDER/style.css -> سيكون متاحًا على /static/style.css
+
 CORS(app, supports_credentials=True)
 TV_IP = "192.168.100.3"  # استبدله بعنوان تلفزيونك
 
