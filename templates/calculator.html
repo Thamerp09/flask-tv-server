@@ -3,25 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thamer Main Page</title>
+    <title>Document</title>
     <link rel="stylesheet" href="../static/style.css">
     <style>
-        
+        .buttonsCal{
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        #display{
+            width: 100%;
+            
+        }
     </style>
 </head>
 <body>
-    <h1>Rawaf alnono</h1>
     <div class="card">
-    <h2>Hi I'm Thamer<br>Welcome to my Project Hub</h2><br>
-    <h2>Here some of the project i've built</h2>
+        <input type="text" id="display" readonly><br>
 
-    <a href="{{ url_for('tv_control_page') }}" class="button-link">Control TV Through Server</a>
-    <a href="{{ url_for('currency_converter_page') }}" class="button-link">Currency Conventor</a>
-    <a href="https://ed56-2001-16a2-f715-3100-4c7e-d8c5-6083-8c6f.ngrok-free.app" class=button-link ,_blank>Open savings</a>
+        <div class="buttonsCal">
+            <button>1</button>
+            <button>2</button>
+            <button>3</button>
+            <button>4</button>
+            <button>5</button>
+            <button>6</button>
+            <button>7</button>
+            <button>8</button>
+            <button>9</button>
+            <button>+</button>
+            <button>x</button>
+            <button>/</button>
+            <button>=</button>
+        </div>
     </div>
-
     
-              
+    
     <button class="theme-toggle-button" id="theme-toggle" aria-label="Toggle theme">
         <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
             <path d="M480-280q-83 0-141.5-58.5T280-480q0-83 58.5-141.5T480-680q83 0 141.5 58.5T680-480q0 83-58.5 141.5T480-280ZM200-440H40v-80h160v80Zm720 0H760v-80h160v80ZM440-760v-160h80v160h-80Zm0 720v-160h80v160h-80ZM256-650l-101-97 57-59 96 100-52 56Zm492 496-97-101 53-55 101 97-57 59Zm-98-550 97-101 59 57-100 96-56-52ZM154-212l101-97 55 53-97 101-59-57Z"/>
@@ -30,15 +47,10 @@
             <path d="M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q14 0 27.5 1t26.5 3q-41 29-65.5 75.5T444-660q0 90 63 153t153 63q55 0 101-24.5t75-65.5q2 13 3 26.5t1 27.5q0 150-105 255T480-120Z"/>
         </svg>
     </button>
-
-    
-        <!-- ... باقي محتوى صفحتك ... -->
-    <footer>
-    <p>© Thamer</p>
-  </footer>
-
-  <script src="../static/js/main.js"></script>
+    <script src="../static/js/main.js"></script>
 </body>
-
-   
+<script>
+    const display = doucment.getElementById('display');
+    const buttons = doucment.querySelectorAll('buttonsCal')
+</script>
 </html>
