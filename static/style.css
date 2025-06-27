@@ -1,0 +1,612 @@
+/* --- GLOBAL STYLES & RESETS --- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* --- CSS VARIABLES FOR THEMEING --- */
+:root {
+    /* Light Mode (Default) */
+    --background-color: #f0f2f5;
+    --card-background-color: rgba(255, 255, 255, 0.95);
+    --text-color: #1c1e21; /* لون النص الأساسي للوضع النهاري */
+    --secondary-text-color: #606770;
+    --button-background-color: #007bff;
+    --button-text-color: #ffffff;
+    --button-hover-background-color: #0056b3;
+    --link-color: #007bff;
+    --border-color: rgba(0, 0, 0, 0.1);
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --input-background: #ffffff;
+    --input-border: #ced4da;
+    --input-focus-border: #80bdff;
+    --animated-bg-opacity: 0;
+    --theme-icon-color: #4a5568; /* لون أيقونة الشمس/القمر في الوضع النهاري */
+}
+
+body.dark-mode {
+    /* Dark Mode */
+    --background-color: #1a1a2e; /* تم تعديله ليتطابق مع خلفيتك */
+    --card-background-color: rgba(35, 35, 55, 0.75); /* مثل ما كان لديك */
+    --text-color: #e4e6eb; /* لون النص الأساسي للوضع الليلي */
+    --secondary-text-color: #b0b3b8;
+    --button-background-color: rgba(0, 191, 255, 0.7);
+    --button-text-color: #ffffff;
+    --button-hover-background-color: rgba(0, 191, 255, 0.9);
+    --link-color: #00bfff;
+    --border-color: rgba(255, 255, 255, 0.15); /* زدنا الشفافية قليلاً */
+    --shadow-color: rgba(0, 0, 0, 0.37); /* مثل ما كان لديك */
+    --input-background: rgba(255, 255, 255, 0.08); /* مثل ما كان لديك */
+    --input-border: rgba(255, 255, 255, 0.2);   /* مثل ما كان لديك */
+    --input-focus-border: var(--link-color);
+    --animated-bg-opacity: 1;
+    --theme-icon-color: #e3e3e3; /* لون أيقونة الشمس/القمر في الوضع الليلي */
+}
+
+/* --- BASE BODY STYLING --- */
+body {
+    font-family: 'Inter', 'Poppins', 'Nunito', 'Roboto', sans-serif;
+    text-align: center;
+    background-color: var(--background-color);
+    color: var(--text-color); /* هذا سيؤثر على النص العام */
+    padding: 20px;
+    overflow-y: auto;
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Animated background (conditional opacity) */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #1b1e32);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    z-index: -1;
+    opacity: var(--animated-bg-opacity);
+    transition: opacity 0.5s ease;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* --- TYPOGRAPHY --- */
+h1 {
+    font-size: clamp(1.8rem, 5vw, 2.5rem);
+    margin-bottom: 25px;
+    margin-top: 20px;
+    line-height: 1.2;
+    color: var(--text-color);
+}
+
+h2 {
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
+    margin-top: 20px;
+    margin-bottom: 15px;
+    /* color: #e0e0e0;  تم استبداله بـ var(--text-color) أو var(--secondary-text-color) */
+    color: var(--text-color);
+}
+
+p {
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
+    line-height: 1.6;
+    margin-bottom: 15px;
+    color: var(--text-color);
+}
+
+/* --- CARD STYLING --- */
+.card {
+    background-color: var(--card-background-color);
+    border-radius: 20px;
+    padding: clamp(20px, 5vw, 40px);
+    width: 90%;
+    max-width: 650px;
+    margin: 20px auto;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 8px 24px var(--shadow-color);
+    text-align: center;
+    overflow: hidden;
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+body.dark-mode .card {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+
+/* --- FORM ELEMENTS --- */
+input[type="text"],
+input[type="number"],
+select {
+    font-family: inherit;
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
+    padding: 12px 15px;
+    width: 100%;
+    max-width: 450px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid var(--input-border);
+    background-color: var(--input-background);
+    color: var(--text-color);
+    outline: none;
+    transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="text"]::placeholder,
+input[type="number"]::placeholder {
+    color: color-mix(in srgb, var(--text-color) 50%, transparent);
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus {
+    border-color: var(--input-focus-border);
+    box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--input-focus-border) 25%, transparent);
+}
+
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 10px;
+    padding-right: 40px;
+}
+/* Select arrow color */
+body:not(.dark-mode) select {
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23555555%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+}
+body.dark-mode select {
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23ffffff%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+}
+
+
+/* --- BUTTONS & BUTTON-LIKE LINKS --- */
+/* القاعدة العامة للأزرار والروابط التي تشبه الأزرار */
+.button-link,
+button.regular-button { /* سنستخدم .regular-button للأزرار العادية غير زر التبديل */
+    display: inline-block;
+    padding: 0.7em 1.8em;
+    margin: 8px 5px;
+    font-family: inherit;
+    font-size: clamp(0.85rem, 2.2vw, 0.95rem);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--button-text-color);
+    background-color: var(--button-background-color);
+    border: 1px solid var(--button-background-color);
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 3px 8px var(--shadow-color),
+                0 1px 2px var(--shadow-color);
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    user-select: none;
+    -webkit-user-select: none;
+    min-width: 120px;
+}
+
+.button-link:hover,
+button.regular-button:hover,
+.button-link:focus,
+button.regular-button:focus {
+    background-color: var(--button-hover-background-color);
+    color: var(--button-text-color);
+    box-shadow: 0 5px 15px color-mix(in srgb, var(--button-background-color) 30%, transparent),
+                0 2px 5px var(--shadow-color);
+    transform: translateY(-2px);
+    outline: none;
+}
+
+.button-link:active,
+button.regular-button:active {
+    background-color: color-mix(in srgb, var(--button-hover-background-color) 90%, black);
+    transform: translateY(0px) scale(0.97);
+    box-shadow: 0 2px 5px var(--shadow-color);
+}
+
+
+/* --- SPECIFIC ELEMENTS (Result, Status, HR) --- */
+#result, #status {
+    font-size: clamp(1.1rem, 3vw, 1.4rem);
+    margin-top: 25px;
+    font-weight: bold;
+    min-height: 30px;
+    word-break: break-word;
+    color: var(--text-color);
+}
+#status { color: var(--secondary-text-color); }
+
+#statusE {
+    font-size: clamp(3rem, 10vw, 4rem);
+    color: #ffcc00;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease-in-out;
+}
+#statusE:hover { transform: scale(1.2); }
+
+hr {
+    border: none;
+    height: 1px;
+    background-color: var(--border-color);
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 70%;
+}
+
+/* --- ANIMATIONS & EFFECTS (H1 Span Bounce) --- */
+h1 span {
+    position:relative;
+    top: 0;
+    color: var(--link-color); /* Use link color or a specific accent */
+    display: inline-block;
+    font-size: 1em;
+    text-shadow: 0 1px 0 var(--secondary-text-color), 0 2px 0 var(--secondary-text-color),
+                 0 5px 8px rgba(0,0,0,0.2);
+    animation: bounce 0.7s ease-in-out infinite alternate;
+}
+h1 span:nth-child(2){ animation-delay:0.05s ; }
+h1 span:nth-child(3){ animation-delay:0.1s ; }
+h1 span:nth-child(4){ animation-delay:0.15s; }
+h1 span:nth-child(5){ animation-delay:0.2s; }
+h1 span:nth-child(6){ animation-delay:0.25s; }
+
+@keyframes bounce {
+    100%{
+        top: -8px;
+        text-shadow: 0 1px 0 var(--secondary-text-color), 0 2px 0 var(--secondary-text-color),
+                     0 15px 10px rgba(0,0,0,0.1);
+    }
+}
+
+/* --- THEME TOGGLE BUTTON (Using SVGs in HTML) --- */
+.theme-toggle-button {
+    background: none;
+    border: none;
+    padding: 6px; /* قللنا الحشو قليلاً */
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--theme-icon-color); /* استخدام متغير للون الأيقونة */
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    z-index: 1000;
+    border-radius: 50%; /* لجعله دائريًا إذا أردت له خلفية لاحقًا */
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+.theme-toggle-button:hover {
+    /* يمكنك إضافة تأثير عند المرور، مثل تغيير طفيف في اللون أو الحجم */
+    /* color: var(--link-color); */
+    transform: scale(1.1);
+}
+.theme-toggle-button:focus {
+    outline: 2px solid var(--link-color); /* إضافة إطار عند التركيز */
+    outline-offset: 2px;
+}
+
+.theme-toggle-button svg {
+    width: 24px;
+    height: 24px;
+    transition: opacity 0.3s ease, display 0s linear 0.3s; /* تأخير إخفاء display */
+}
+
+/* الوضع الافتراضي (النهاري): إظهار الشمس، إخفاء القمر */
+.theme-toggle-button .icon-moon {
+    display: none;
+}
+.theme-toggle-button .icon-sun {
+    display: inline-block; /* أو block/flex حسب الحاجة */
+}
+
+/* الوضع الليلي: إظهار القمر، إخفاء الشمس */
+body.dark-mode .theme-toggle-button .icon-sun {
+    display: none;
+}
+body.dark-mode .theme-toggle-button .icon-moon {
+    display: inline-block; /* أو block/flex */
+}
+
+/* --- MEDIA QUERIES FOR RESPONSIVENESS --- */
+@media (max-width: 768px) {
+    .card { padding: clamp(20px, 4vw, 30px); max-width: 90%; }
+    h1 { margin-top: 15px; }
+    input[type="text"], input[type="number"], select, button.regular-button, .button-link {
+        font-size: clamp(0.85rem, 2.2vw, 0.95rem);
+        padding: 10px 15px;
+    }
+    button.regular-button, .button-link { padding: 10px 20px; }
+}
+
+@media (max-width: 600px) {
+    body { padding: 10px; }
+    .card { width: 95%; padding: 20px; margin-top: 15px; margin-bottom: 15px; }
+    h1 { font-size: clamp(1.5rem, 6vw, 2rem); margin-bottom: 20px; }
+
+    input[type="text"], input[type="number"], select, button.regular-button, .button-link {
+        width: 100%;
+        max-width: none;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .button-link, button.regular-button {
+        display: block;
+        width: 90%;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    /* لضمان المسافات بين الأزرار والروابط المكدسة */
+    .card button.regular-button + button.regular-button,
+    .card .button-link + .button-link,
+    .card button.regular-button + .button-link,
+    .card .button-link + button.regular-button {
+        margin-top: 10px;
+    }
+
+    .theme-toggle-button {
+        top: 10px;
+        right: 10px;
+        padding: 5px;
+    }
+    .theme-toggle-button svg {
+        width: 22px; /* تصغير الأيقونة قليلاً على الجوال */
+        height: 22px;
+    }
+}
+/* ... (كود CSS السابق للمتغيرات العامة، body, card, typography, form elements، إلخ. يبقى كما هو) ... */
+
+/* --- STYLING FOR REGULAR BUTTONS AND BUTTON-LIKE LINKS --- */
+.button-link,
+button.regular-button { /* استهدف فئة .regular-button للأزرار العادية و .button-link للروابط */
+    display: inline-block; /* Or 'block' if you want them full-width by default on their own line */
+    padding: 0.75em 1.75em;  /* Padding: vertical, horizontal. Adjust for size. */
+    margin: 8px 5px;       /* Margin around each button */
+    
+    font-family: inherit;  /* Inherit global font */
+    font-size: clamp(0.85rem, 2.2vw, 0.95rem); /* Responsive font size */
+    font-weight: 600; /* Bold or semi-bold */
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    line-height: 1.5; /* Good for button text readability */
+    
+    color: var(--button-text-color); /* Uses CSS variable for text color */
+    background-color: var(--button-background-color); /* Uses CSS variable for background */
+    
+    border: 1px solid transparent; /* Start with a transparent border */
+    /* Optional: if you want a border that matches the background or is slightly darker */
+    /* border-color: color-mix(in srgb, var(--button-background-color) 85%, black); */
+    
+    border-radius: 8px;      /* Rounded corners */
+    
+    text-align: center;
+    text-decoration: none;   /* Removes underline from <a> tags with .button-link */
+    cursor: pointer;
+    
+    box-shadow: 0 2px 5px var(--shadow-color), /* Softer shadow */
+                0 1px 1px color-mix(in srgb, var(--shadow-color) 50%, transparent);
+    
+    transition: background-color 0.25s ease, 
+                transform 0.15s ease, 
+                box-shadow 0.25s ease,
+                border-color 0.25s ease;
+    
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    min-width: 130px; /* Minimum width for buttons */
+    appearance: none; /* Reset default browser appearance for buttons */
+    -webkit-appearance: none;
+}
+
+/* --- Hover and Focus States --- */
+.button-link:hover,
+button.regular-button:hover {
+    background-color: var(--button-hover-background-color); /* Use variable for hover background */
+    color: var(--button-text-color); /* Ensure text color remains good */
+    box-shadow: 0 4px 10px color-mix(in srgb, var(--button-hover-background-color) 30%, transparent), /* Enhanced shadow on hover */
+                0 2px 4px var(--shadow-color);
+    transform: translateY(-2px); /* Slight lift effect */
+}
+
+.button-link:focus,
+button.regular-button:focus {
+    background-color: var(--button-hover-background-color);
+    color: var(--button-text-color);
+    outline: 2px solid var(--link-color); /* Focus outline using link color variable */
+    outline-offset: 2px;
+    box-shadow: 0 4px 10px color-mix(in srgb, var(--button-hover-background-color) 30%, transparent),
+                0 2px 4px var(--shadow-color);
+}
+.button-link:focus:not(:focus-visible), /* Remove outline if focus is not keyboard initiated */
+button.regular-button:focus:not(:focus-visible) {
+    outline: none;
+}
+
+
+/* --- Active (Pressed) State --- */
+.button-link:active,
+button.regular-button:active {
+    background-color: color-mix(in srgb, var(--button-hover-background-color) 85%, black); /* Slightly darker when pressed */
+    transform: translateY(0px) scale(0.97); /* Push down and slightly shrink */
+    box-shadow: 0 1px 3px var(--shadow-color); /* Minimal shadow when pressed */
+}
+
+/* --- Disabled State (Optional, but good practice) --- */
+.button-link:disabled,
+button.regular-button:disabled {
+    background-color: color-mix(in srgb, var(--button-background-color) 50%, #88888880); /* More muted background */
+    color: color-mix(in srgb, var(--button-text-color) 60%, #88888880); /* Muted text */
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+
+/* --- Ensure these variables are defined in :root and body.dark-mode --- */
+/* Example of how they should be defined (you already have these) */
+/*
+:root {
+    --button-text-color: #ffffff;
+    --button-background-color: #007bff; // Light mode button blue
+    --button-hover-background-color: #0056b3;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --link-color: #007bff;
+}
+
+body.dark-mode {
+    --button-text-color: #ffffff;
+    --button-background-color: rgba(0, 191, 255, 0.7); // Dark mode button cyan
+    --button-hover-background-color: rgba(0, 191, 255, 0.9);
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --link-color: #00bfff;
+}
+*/
+
+/* ... (بقية كود CSS الخاص بك MEDIA QUERIES, theme-toggle-button إلخ) ... */
+
+/* --- تعديل في Media Queries إذا لزم الأمر للأزرار العادية --- */
+@media (max-width: 600px) {
+    /* ... (قواعدك الحالية) ... */
+
+    /* تعديل الأزرار العادية والروابط التي تشبه الأزرار على الجوال */
+    .button-link, 
+    button.regular-button {
+        display: block; /* يجعل كل زر/رابط في سطر خاص به */
+        width: 90%;    /* أو 100% إذا أردت أن يملأ عرض الكارد */
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 12px; /* زيادة الهامش العلوي والسفلي قليلاً */
+        margin-bottom: 12px;
+        padding: 0.8em 1em;
+    }
+
+    /* لضمان المسافات بين الأزرار والروابط المكدسة */
+    .card button.regular-button + button.regular-button,
+    .card .button-link + .button-link,
+    .card button.regular-button + .button-link,
+    .card .button-link + button.regular-button {
+        margin-top: 12px; /* تباعد موحد */
+    }
+}/* ... (كود CSS السابق للمتغيرات العامة، body, card, typography, form elements، إلخ. يبقى كما هو) ... */
+
+/* --- STYLING FOR REGULAR BUTTONS --- */
+/* نستهدف جميع الأزرار باستثناء تلك التي لديها فئة .theme-toggle-button */
+button:not(.theme-toggle-button) {
+    display: inline-block;
+    padding: 0.75em 1.75em;
+    margin: 8px 5px;
+    
+    font-family: inherit;
+    font-size: clamp(0.85rem, 2.2vw, 0.95rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    line-height: 1.5;
+    
+    color: var(--button-text-color);
+    background-color: var(--button-background-color);
+    
+    border: 1px solid transparent;
+    /* يمكنك تفعيل هذا إذا أردت حدًا مرئيًا بلون متناسق */
+    /* border-color: color-mix(in srgb, var(--button-background-color) 85%, black); */
+    
+    border-radius: 8px;
+    
+    text-align: center;
+    cursor: pointer;
+    
+    box-shadow: 0 2px 5px var(--shadow-color),
+                0 1px 1px color-mix(in srgb, var(--shadow-color) 50%, transparent);
+    
+    transition: background-color 0.25s ease, 
+                transform 0.15s ease, 
+                box-shadow 0.25s ease,
+                border-color 0.25s ease;
+    
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    min-width: 130px;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+/* --- Hover and Focus States for Regular Buttons --- */
+button:not(.theme-toggle-button):hover {
+    background-color: var(--button-hover-background-color);
+    color: var(--button-text-color);
+    box-shadow: 0 4px 10px color-mix(in srgb, var(--button-hover-background-color) 30%, transparent),
+                0 2px 4px var(--shadow-color);
+    transform: translateY(-2px);
+}
+
+button:not(.theme-toggle-button):focus {
+    background-color: var(--button-hover-background-color);
+    color: var(--button-text-color);
+    outline: 2px solid var(--link-color);
+    outline-offset: 2px;
+    box-shadow: 0 4px 10px color-mix(in srgb, var(--button-hover-background-color) 30%, transparent),
+                0 2px 4px var(--shadow-color);
+}
+button:not(.theme-toggle-button):focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* --- Active (Pressed) State for Regular Buttons --- */
+button:not(.theme-toggle-button):active {
+    background-color: color-mix(in srgb, var(--button-hover-background-color) 85%, black);
+    transform: translateY(0px) scale(0.97);
+    box-shadow: 0 1px 3px var(--shadow-color);
+}
+
+/* --- Disabled State for Regular Buttons (Optional) --- */
+button:not(.theme-toggle-button):disabled {
+    background-color: color-mix(in srgb, var(--button-background-color) 50%, #88888880);
+    color: color-mix(in srgb, var(--button-text-color) 60%, #88888880);
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+/* ... (بقية كود CSS الخاص بك للمتغيرات، Media Queries, theme-toggle-button إلخ) ... */
+
+/* --- تعديل في Media Queries إذا لزم الأمر للأزرار العادية --- */
+@media (max-width: 600px) {
+    /* ... (قواعدك الحالية) ... */
+
+    button:not(.theme-toggle-button) { /* تطبيق التعديلات على الأزرار العادية فقط */
+        display: block;
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 12px;
+        margin-bottom: 12px;
+        padding: 0.8em 1em;
+    }
+
+    /* لضمان المسافات بين الأزرار المكدسة */
+    .card button:not(.theme-toggle-button) + button:not(.theme-toggle-button) {
+        margin-top: 12px;
+    }
+}

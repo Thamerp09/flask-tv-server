@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تشغيل فيديو على الشاشة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Nunito:wght@300;600;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <div class="card">
+    <h1>
+        <span>H</span>
+        <span>E</span>
+        <span>L</span>
+        <span>L</span>
+        <span>O</span>
+        <span>!</span>
+    </h1>
+    <h1>Play video on TV</h1>
+    <input type="text" id="videoUrl" placeholder="Put the link here">
+    <br>
+    <button onclick="playVideo()">▶ Start Video </button>
+    <br>
+    <button onclick="changeVolume('up')">+</button>
+    <button onclick="changeVolume('down')">-</button>
+    <button onclick="changeVolume('mute')">mute</button>
+    <button onclick="fetch(`${NGROK_URL}/mute`, {method: 'POST', headers: {'Authorization': `Bearer ${AUTH_TOKEN}`}}).then(r => r.json()).then(d => console.log(d)).catch(e => console.error(e))">🔇 Test Mute</button>
+
+    <br>
+    <p id="statusE">📺</p>
+    <p id="status"></p>
+    <h2>Some Channels</h2>
+
+    <button onclick="playPresetVideo(this)" id="f" data-url="https://www.youtube.com/watch?v=bNyUyrR0PHo&ab_channel=AlJazeeraArabic%D9%82%D9%86%D8%A7%D8%A9%D8%A7%D9%84%D8%AC%D8%B2%D9%8A%D8%B1%D8%A9https://www.youtube.com/watch?v=PVHVV6pzz3U&ab_channel=%D8%A7%D8%A8%D9%88%D9%85%D8%AD%D8%B3%D9%86">▶ قناة الجزيرة</button>
+    <button onclick="playPresetVideo(this)" data-url="https://www.youtube.com/@osh3lek">▶ قناة ملزلز</button>
+    <br>
+    <button onclick="reboot('reboot')">Reboot The TV</button>
+    <p id="status">📺 في انتظار الأوامر...</p>
+    </div>
+             
+    <button class="theme-toggle-button" id="theme-toggle" aria-label="Toggle theme">
+        <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
+            <path d="M480-280q-83 0-141.5-58.5T280-480q0-83 58.5-141.5T480-680q83 0 141.5 58.5T680-480q0 83-58.5 141.5T480-280ZM200-440H40v-80h160v80Zm720 0H760v-80h160v80ZM440-760v-160h80v160h-80Zm0 720v-160h80v160h-80ZM256-650l-101-97 57-59 96 100-52 56Zm492 496-97-101 53-55 101 97-57 59Zm-98-550 97-101 59 57-100 96-56-52ZM154-212l101-97 55 53-97 101-59-57Z"/>
+        </svg>
+        <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
+            <path d="M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q14 0 27.5 1t26.5 3q-41 29-65.5 75.5T444-660q0 90 63 153t153 63q55 0 101-24.5t75-65.5q2 13 3 26.5t1 27.5q0 150-105 255T480-120Z"/>
+        </svg>
+    </button>
+    <script src="../static/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Conventor</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <div class="card">
+    <h2>Currency Conventor</h2>
+
+    <input type="number" id="amount" placeholder="Enter amount"><br>
+    <h2>Form</h2>
+    <select name="" id="FromCurrency">
+        <option value="USD">USD</option>
+        <option value="SAR">SAR</option>
+        <option value="EUR">EUR</option>
+    </select>
+
+    <h2>To</h2>
+    <select name="" id="ToCurrency">
+        <option value="USD">USD</option>
+        <option value="SAR">SAR</option>
+        <option value="EUR">EUR</option>
+    </select>
+    <br>  
+    <button onclick="convert()">Convert</button>
+    <h2 id="result">Result: </h2>
+    </div>
+             
+    <button class="theme-toggle-button" id="theme-toggle" aria-label="Toggle theme">
+      <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
+          <path d="M480-280q-83 0-141.5-58.5T280-480q0-83 58.5-141.5T480-680q83 0 141.5 58.5T680-480q0 83-58.5 141.5T480-280ZM200-440H40v-80h160v80Zm720 0H760v-80h160v80ZM440-760v-160h80v160h-80Zm0 720v-160h80v160h-80ZM256-650l-101-97 57-59 96 100-52 56Zm492 496-97-101 53-55 101 97-57 59Zm-98-550 97-101 59 57-100 96-56-52ZM154-212l101-97 55 53-97 101-59-57Z"/>
+      </svg>
+      <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
+          <path d="M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q14 0 27.5 1t26.5 3q-41 29-65.5 75.5T444-660q0 90 63 153t153 63q55 0 101-24.5t75-65.5q2 13 3 26.5t1 27.5q0 150-105 255T480-120Z"/>
+      </svg>
+  </button>
+  <script src="../static/js/main.js"></script>
+</body>
+<script>
+async function convert() {
+  const amountInput = document.getElementById("amount");
+  const fromCurrencySelect = document.getElementById("FromCurrency");
+  const toCurrencySelect = document.getElementById("ToCurrency");
+  const resultElement = document.getElementById("result");
+
+  // --------------------------------------------------------------------
+  // !!! هام جداً: استبدل "YOUR_ACTUAL_API_KEY" بمفتاح API الحقيقي !!!
+  // --------------------------------------------------------------------
+  const apiKey = "e2e3c8a326c999a6e65b04d6da06002f"; // <--- ضع مفتاحك هنا
+
+  const amount = parseFloat(amountInput.value); // تحويل القيمة إلى رقم
+  const from = fromCurrencySelect.value;
+  const to = toCurrencySelect.value;
+
+  // 1. التحقق من صحة المبلغ
+  if (isNaN(amount) || amount <= 0) {
+    resultElement.innerText = "❌ Please enter a valid positive amount.";
+    return;
+  }
+
+  // 2. إذا كانت العملات متطابقة
+  if (from === to) {
+    resultElement.innerText = `✅ ${amount.toFixed(2)} ${from} = ${amount.toFixed(2)} ${to}`;
+    return;
+  }
+
+  // 3. تكوين رابط الـ API
+  const url = `https://api.exchangerate.host/convert?access_key=${apiKey}&from=${from}&to=${to}&amount=${amount}`;
+  
+  resultElement.innerText = "⏳ Converting..."; // رسالة انتظار
+
+  try {
+    // 4. إرسال الطلب إلى الـ API
+    const response = await fetch(url);
+    const data = await response.json(); // محاولة قراءة الرد كـ JSON
+
+    // 5. التحقق من نجاح الرد من الـ API
+    // API مثل exchangerate.host عادةً ما ترسل `data.success === true` عند النجاح
+    // و `data.result` يحتوي على القيمة المحولة
+    if (data && data.success === true && typeof data.result === "number") {
+      resultElement.innerText = `✅ ${amount.toFixed(2)} ${from} = ${data.result.toFixed(2)} ${to}`;
+    } else {
+      // إذا لم تنجح العملية (مثلاً: مفتاح API خطأ، عملة غير مدعومة، إلخ)
+      // نحاول عرض رسالة الخطأ من الـ API إذا كانت موجودة
+      let errorMessage = "❌ Conversion failed.";
+      if (data && data.error && data.error.info) {
+        errorMessage = `❌ Error: ${data.error.info}`;
+      } else if (!response.ok) {
+        // إذا كان هناك خطأ في HTTP نفسه (مثل 404, 500)
+        errorMessage = `❌ HTTP error! Status: ${response.status}`;
+      }
+      resultElement.innerText = errorMessage;
+      console.log("API Response (failure or unexpected):", data); // اطبع الرد للمساعدة في التشخيص
+    }
+
+  } catch (error) {
+    // 6. هذا يلتقط أخطاء الشبكة (مثل عدم وجود اتصال بالإنترنت)
+    // أو إذا فشلت `response.json()` (مثلاً الرد لم يكن JSON صالح)
+    console.error("Fetch/Network Error:", error);
+    resultElement.innerText = "❌ Something went wrong. Check your internet connection or the console.";
+  }
+}
+</script>
+</html>
