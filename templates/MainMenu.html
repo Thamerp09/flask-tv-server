@@ -3,21 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thamer // Command Center</title>
+    <title>Thamer's Launchpad</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <!-- الكود مدمج في الأسفل -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+    <!-- الكود مدمج -->
     <style>
         :root {
-            --bg-color: #111827;
-            --text-primary: #f9fafb;
-            --text-secondary: #9ca3af;
-            --palette-bg: #1f2937;
-            --palette-border: #374151;
-            --highlight-bg: rgba(59, 130, 246, 0.2);
-            --highlight-border: #3b82f6;
-            --input-bg: #111827;
+            /* Dark Mode (Default) */
+            --bg: #000000;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --card-bg: #1a1a1a;
+            --card-border: #2a2a2a;
+            --card-hover-bg: #2a2a2a;
+            --accent: #007aff; /* Apple Blue */
+        }
+        
+        body.light-mode {
+            --bg: #f5f5f7;
+            --text-primary: #000000;
+            --text-secondary: #6e6e73;
+            --card-bg: #ffffff;
+            --card-border: #e5e5e5;
+            --card-hover-bg: #f0f0f0;
         }
 
         *, *::before, *::after {
@@ -28,304 +37,153 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
+            background-color: var(--bg);
             color: var(--text-primary);
-            height: 100vh;
+            min-height: 100vh;
+            padding: clamp(2rem, 8vw, 4rem) clamp(1rem, 5vw, 2rem);
             display: flex;
-            align-items: center;
             justify-content: center;
-            overflow: hidden;
-            position: relative;
         }
         
-        /* Grainy background effect */
-        body::after {
-            content: '';
-            position: fixed;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
-            opacity: 0.03;
-            animation: grain 8s steps(10) infinite;
-            pointer-events: none;
-            z-index: 0;
-        }
-        
-        @keyframes grain {
-            0%, 100% { transform: translate(0, 0); }
-            10% { transform: translate(-5%, -10%); }
-            20% { transform: translate(-15%, 5%); }
-            30% { transform: translate(7%, -25%); }
-            /* ... more steps */
-            90% { transform: translate(-5%, 25%); }
-        }
-
-        .main-content {
-            text-align: center;
-            z-index: 1;
-        }
-        h1 {
-            font-size: clamp(2rem, 5vw, 3rem);
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-        
-        .open-palette-btn {
-            background-color: transparent;
-            border: 1px solid var(--palette-border);
-            color: var(--text-secondary);
-            font-size: 1rem;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.2s, color 0.2s;
-        }
-        .open-palette-btn:hover {
-            background-color: var(--palette-bg);
-            color: var(--text-primary);
-        }
-        .open-palette-btn kbd {
-            background: var(--input-bg);
-            border: 1px solid var(--palette-border);
-            padding: 2px 6px;
-            border-radius: 4px;
-            margin-left: 0.5rem;
-        }
-
-        /* --- COMMAND PALETTE --- */
-        .command-palette {
-            display: none; /* Hidden by default */
-            position: fixed;
-            top: 0;
-            left: 0;
+        .main-container {
             width: 100%;
-            height: 100%;
-            z-index: 100;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
-            align-items: flex-start;
-            justify-content: center;
-            padding-top: 15vh;
+            max-width: 960px;
         }
 
-        .command-palette.is-open {
+        .header {
             display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        .time-date {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        /* --- LAUNCHPAD GRID --- */
+        .launchpad-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 1.5rem;
         }
         
-        .palette-container {
-            width: 90%;
-            max-width: 600px;
-            background: var(--palette-bg);
-            border: 1px solid var(--palette-border);
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        .launch-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            aspect-ratio: 1 / 1;
+            
             display: flex;
             flex-direction: column;
-            max-height: 70vh;
-        }
-        
-        .palette-search {
-            padding: 0.75rem;
-            border-bottom: 1px solid var(--palette-border);
-        }
-        #palette-input {
-            width: 100%;
-            background: var(--input-bg);
-            border: 1px solid var(--palette-border);
-            color: var(--text-primary);
-            font-size: 1.1rem;
-            padding: 0.75rem;
-            border-radius: 6px;
-            outline: none;
-        }
-        #palette-input:focus {
-            border-color: var(--highlight-border);
-        }
-
-        .palette-results {
-            list-style: none;
-            padding: 0.5rem;
-            margin: 0;
-            overflow-y: auto;
-        }
-        
-        .palette-item {
-            display: flex;
             align-items: center;
-            gap: 1rem;
-            padding: 0.75rem;
-            border-radius: 6px;
-            cursor: pointer;
+            justify-content: center;
+            gap: 0.75rem;
+            
             text-decoration: none;
-            color: var(--text-secondary);
-        }
-        .palette-item.hidden {
-            display: none;
-        }
-        .palette-item.highlighted,
-        .palette-item:hover {
-            background-color: var(--highlight-bg);
             color: var(--text-primary);
-        }
-
-        .item-icon {
-            width: 24px;
-            height: 24px;
-            flex-shrink: 0;
-        }
-        .item-title {
             font-weight: 500;
+            text-align: center;
+            
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s ease-out, background-color 0.2s;
+        }
+        .launch-card:hover {
+            transform: scale(1.05);
+            background-color: var(--card-hover-bg);
         }
 
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .command-palette {
-                padding-top: 0;
-                align-items: stretch;
-            }
-            .palette-container {
-                width: 100%;
-                height: 100%;
-                max-width: none;
-                max-height: none;
-                border-radius: 0;
-                border: none;
+        .card-icon {
+            font-size: 2.5rem;
+        }
+        
+        .card-arrow {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .launch-card:hover .card-arrow {
+            opacity: 1;
+        }
+
+        @media (max-width: 600px) {
+            .launchpad-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 1rem;
             }
         }
     </style>
 </head>
-<body>
+<body class="dark-mode">
 
-    <main class="main-content">
-        <h1>Thamer's Command Center</h1>
-        <button class="open-palette-btn" id="open-palette">
-            Open Projects <kbd>Ctrl</kbd> <kbd>K</kbd>
-        </button>
-    </main>
+    <main class="main-container">
+        <header class="header">
+            <h1>Launchpad</h1>
+            <div id="time-date" class="time-date"></div>
+        </header>
 
-    <div class="command-palette" id="command-palette">
-        <div class="palette-container">
-            <div class="palette-search">
-                <input type="text" id="palette-input" placeholder="Search projects...">
-            </div>
-            <ul class="palette-results" id="palette-results">
-                <!-- Items are added via JS -->
-            </ul>
+        <div class="launchpad-grid">
+            <a href="https://chat-6ivt.onrender.com" class="launch-card">
+                <div class="card-icon">💬</div>
+                <span>TChat</span>
+                <span class="card-arrow">↗</span>
+            </a>
+             <a href="http://100.76.175.121:32400" class="launch-card">
+                <div class="card-icon">🎬</div>
+                <span>Plex</span>
+                <span class="card-arrow">↗</span>
+            </a>
+             <a href="{{ url_for('tv_control_page') }}" class="launch-card">
+                <div class="card-icon">📺</div>
+                <span>TV Control</span>
+                <span class="card-arrow">↗</span>
+            </a>
+             <a href="{{ url_for('currency_converter_page') }}" class="launch-card">
+                <div class="card-icon">💸</div>
+                <span>Converter</span>
+                <span class="card-arrow">↗</span>
+            </a>
+            <a href="http://100.76.175.121:9191/home" class="launch-card">
+                <div class="card-icon">🏠</div>
+                <span>Rent Tracker</span>
+                <span class="card-arrow">↗</span>
+            </a>
+             <a href="http://100.76.175.121:9090" class="launch-card">
+                <div class="card-icon">⚙️</div>
+                <span>Server</span>
+                <span class="card-arrow">↗</span>
+            </a>
+             <a href="http://100.76.175.121" class="launch-card">
+                <div class="card-icon">💰</div>
+                <span>Savings</span>
+                <span class="card-arrow">↗</span>
+            </a>
         </div>
-    </div>
-
+    </main>
+    
     <script>
-        const projects = [
-            { title: 'TChat', url: 'https://chat-6ivt.onrender.com', icon: '💬', keywords: 'chat message' },
-            { title: 'Plex Media Server', url: 'http://100.76.175.121:32400', icon: '🎬', keywords: 'plex movie tv' },
-            { title: 'TV Control', url: '{{ url_for("tv_control_page") }}', icon: '📺', keywords: 'remote television' },
-            { title: 'Currency Converter', url: '{{ url_for("currency_converter_page") }}', icon: '💸', keywords: 'money exchange' },
-            { title: 'Rent Tracker', url: 'http://100.76.175.121:9191/home', icon: '🏠', keywords: 'database payment' },
-            { title: 'Server Control', url: 'http://100.76.175.121:9090', icon: '⚙️', keywords: 'dashboard system' },
-            { title: 'Open Savings', url: 'http://100.76.175.121', icon: '💰', keywords: 'finance money' }
-        ];
-
         document.addEventListener('DOMContentLoaded', () => {
-            const openBtn = document.getElementById('open-palette');
-            const palette = document.getElementById('command-palette');
-            const input = document.getElementById('palette-input');
-            const resultsList = document.getElementById('palette-results');
+            const timeDateElement = document.getElementById('time-date');
             
-            // Populate results
-            projects.forEach(project => {
-                const li = document.createElement('li');
-                li.dataset.keywords = `${project.title.toLowerCase()} ${project.keywords}`;
-                
-                const a = document.createElement('a');
-                a.href = project.url;
-                a.classList.add('palette-item');
-                a.innerHTML = `
-                    <span class="item-icon">${project.icon}</span>
-                    <span class="item-title">${project.title}</span>
-                `;
-                li.appendChild(a);
-                resultsList.appendChild(li);
-            });
-
-            const allItems = resultsList.querySelectorAll('li');
-
-            const openPalette = () => {
-                palette.classList.add('is-open');
-                input.focus();
-            };
-
-            const closePalette = () => {
-                palette.classList.remove('is-open');
-                input.value = '';
-                filterResults(); // Reset filter
-            };
-
-            const filterResults = () => {
-                const query = input.value.toLowerCase();
-                allItems.forEach(item => {
-                    if (item.dataset.keywords.includes(query)) {
-                        item.classList.remove('hidden');
-                    } else {
-                        item.classList.add('hidden');
-                    }
-                });
-                highlightItem(0); // Highlight the first visible item
-            };
+            function updateTime() {
+                const now = new Date();
+                const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                const date = now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+                timeDateElement.textContent = `${date} ${time}`;
+            }
             
-            let highlightedIndex = -1;
-            const highlightItem = (index) => {
-                const visibleItems = Array.from(allItems).filter(item => !item.classList.contains('hidden'));
-                if (visibleItems.length === 0) return;
-                
-                // Remove previous highlight
-                const currentlyHighlighted = resultsList.querySelector('.highlighted');
-                if (currentlyHighlighted) currentlyHighlighted.classList.remove('highlighted');
-                
-                // Clamp index
-                highlightedIndex = Math.max(0, Math.min(index, visibleItems.length - 1));
-                
-                // Add new highlight
-                const itemToHighlight = visibleItems[highlightedIndex];
-                if(itemToHighlight) {
-                    itemToHighlight.querySelector('a').classList.add('highlighted');
-                    itemToHighlight.scrollIntoView({ block: 'nearest' });
-                }
-            };
-
-            // Event Listeners
-            openBtn.addEventListener('click', openPalette);
-            palette.addEventListener('click', (e) => {
-                if (e.target === palette) closePalette();
-            });
-            input.addEventListener('input', filterResults);
-
-            // Keyboard Navigation
-            document.addEventListener('keydown', (e) => {
-                // Open with Ctrl+K or Cmd+K
-                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-                    e.preventDefault();
-                    palette.classList.contains('is-open') ? closePalette() : openPalette();
-                }
-                
-                if (palette.classList.contains('is-open')) {
-                    if (e.key === 'Escape') closePalette();
-                    if (e.key === 'ArrowDown') {
-                         e.preventDefault();
-                         highlightItem(highlightedIndex + 1);
-                    }
-                    if (e.key === 'ArrowUp') {
-                         e.preventDefault();
-                         highlightItem(highlightedIndex - 1);
-                    }
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        const highlightedLink = resultsList.querySelector('.highlighted');
-                        if (highlightedLink) highlightedLink.click();
-                    }
-                }
-            });
-            
-            highlightItem(0);
+            updateTime();
+            setInterval(updateTime, 1000); // Update every second
         });
     </script>
 </body>
