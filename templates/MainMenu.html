@@ -3,40 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thamer's Project Hub</title>
+    <title>Thamer // Cosmic Hub</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="../static/js/main.js" defer></script>
-
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;500;700&display=swap" rel="stylesheet">
+    <!-- لا حاجة لملف JS خارجي، الكود مدمج في الأسفل -->
     <style>
-        /* --- CSS VARIABLES & THEMEING --- */
+        /* --- CSS VARIABLES --- */
         :root {
-            /* Light Mode */
-            --bg-color: #eef2f9;
-            --text-color-primary: #111827;
-            --text-color-secondary: #4b5563;
-            --glass-bg: rgba(255, 255, 255, 0.6);
-            --glass-border: rgba(255, 255, 255, 0.9);
-            --glass-shadow: rgba(0, 0, 0, 0.05);
-            --theme-icon-color: #374151;
-            --aurora-orb-1: #7dd3fc;
-            --aurora-orb-2: #a5b4fc;
-            --aurora-orb-3: #f9a8d4;
-        }
-
-        body.dark-mode {
-            /* Dark Mode */
-            --bg-color: #0d1117;
-            --text-color-primary: #e6edf3;
-            --text-color-secondary: #8b949e;
-            --glass-bg: rgba(30, 36, 49, 0.5);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --glass-shadow: rgba(0, 0, 0, 0.2);
-            --theme-icon-color: #c9d1d9;
-            --aurora-orb-1: #0284c7;
-            --aurora-orb-2: #4f46e5;
-            --aurora-orb-3: #be185d;
+            --bg-color: #020010;
+            --text-primary: #eaf8ff;
+            --text-secondary: #a8c8ff;
+            --card-bg: rgba(20, 28, 60, 0.4);
+            --card-border: rgba(100, 150, 255, 0.3);
+            --card-glow: rgba(150, 200, 255, 0.7);
         }
 
         /* --- GLOBAL RESETS & BASE STYLES --- */
@@ -46,239 +26,246 @@
             padding: 0;
         }
 
-        html {
-            color-scheme: dark;
-        }
-
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Exo 2', sans-serif;
             background-color: var(--bg-color);
-            color: var(--text-color-primary);
-            min-height: 100vh;
-            padding: 2rem;
-            text-align: center;
-            position: relative;
-            transition: background-color 0.4s ease;
-            /* السماح بالتمرير العمودي */
-            overflow-x: hidden; 
+            color: var(--text-primary);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            cursor: grab;
+        }
+        body.grabbing {
+            cursor: grabbing;
         }
 
-        /* --- AURORA BACKGROUND EFFECT --- */
-        .aurora-container {
+        /* --- STARRY BACKGROUND --- */
+        .stars {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            background-image:
+                radial-gradient(1px 1px at 20px 30px, #eee, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 40px 70px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 50px 160px, #ddd, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 90px 40px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 130px 80px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 160px 120px, #ddd, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            animation: twinkle 5s infinite linear;
             z-index: -1;
-            filter: blur(100px) opacity(0.4);
-            /* **الإصلاح الرئيسي هنا** */
-            overflow: hidden; 
-        }
-        body.dark-mode .aurora-container {
-             filter: blur(120px) opacity(0.6);
-        }
-
-        .aurora-orb {
-            position: absolute;
-            border-radius: 50%;
-        }
-
-        .orb1 {
-            background: var(--aurora-orb-1);
-            width: 400px; height: 400px;
-            top: 10%; left: 10%;
-            animation: move-orb1 20s infinite alternate;
-        }
-        .orb2 {
-            background: var(--aurora-orb-2);
-            width: 500px; height: 500px;
-            top: 50%; left: 60%;
-            animation: move-orb2 25s infinite alternate;
-        }
-        .orb3 {
-            background: var(--aurora-orb-3);
-            width: 350px; height: 350px;
-            bottom: 5%; right: 5%;
-            animation: move-orb3 18s infinite alternate;
-        }
-
-        @keyframes move-orb1 {
-            from { transform: translate(-20%, 10%) rotate(0deg); }
-            to { transform: translate(30%, -20%) rotate(360deg); }
-        }
-        @keyframes move-orb2 {
-            from { transform: translate(10%, -15%) rotate(0deg); }
-            to { transform: translate(-20%, 25%) rotate(360deg); }
-        }
-        @keyframes move-orb3 {
-            from { transform: translate(-10%, 10%) rotate(0deg); }
-            to { transform: translate(15%, -10%) rotate(360deg); }
-        }
-
-        /* --- MAIN CONTENT & TYPOGRAPHY --- */
-        .main-container {
-            width: 100%;
-            max-width: 800px;
-            z-index: 1;
-            /* **الإصلاح الرئيسي هنا** - توسيط أفقي وإضافة هوامش عمودية */
-            margin: 5rem auto; 
-        }
-
-        h1 {
-            font-size: clamp(2.5rem, 8vw, 4.5rem);
-            font-weight: 700;
-            margin-bottom: 0.25em;
-        }
-
-        h1 span {
-            background: linear-gradient(90deg, #38bdf8, #818cf8, #e879f9);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        h2 {
-            font-size: clamp(1rem, 4vw, 1.25rem);
-            font-weight: 400;
-            color: var(--text-color-secondary);
-            margin-bottom: 2.5rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* --- BENTO GRID FOR PROJECTS --- */
-        .project-grid {
-            display: grid;
-            gap: 1rem;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        }
-
-        .grid-item {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            box-shadow: 0 4px 20px var(--glass-shadow);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 1.5rem;
-            color: var(--text-color-primary);
-            font-weight: 600;
-            font-size: 0.9rem;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100px;
-            transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-        }
-
-        .grid-item:hover {
-            transform: translateY(-6px) scale(1.03);
-            border-color: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 30px var(--glass-shadow);
-        }
-
-        .grid-item.wide {
-            grid-column: span 2;
-        }
-
-        /* --- THEME TOGGLE BUTTON --- */
-        .theme-toggle-button {
-            position: fixed;
-            top: 1.5rem;
-            right: 1.5rem;
-            z-index: 10;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 50%;
-            box-shadow: 0 2px 10px var(--glass-shadow);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            color: var(--theme-icon-color);
-            transition: all 0.2s ease;
         }
         
-        .theme-toggle-button:hover {
-            transform: scale(1.1) rotate(-15deg);
-            border-color: rgba(255, 255, 255, 0.4);
+        @keyframes twinkle {
+            from { transform: translateX(0); }
+            to { transform: translateX(-200px); }
         }
 
-        .theme-toggle-button svg { width: 22px; height: 22px; }
-        .theme-toggle-button .icon-moon { display: none; }
-        .theme-toggle-button .icon-sun { display: block; }
-        body.dark-mode .theme-toggle-button .icon-sun { display: none; }
-        body.dark-mode .theme-toggle-button .icon-moon { display: block; }
+        /* --- HEADER TEXT --- */
+        .header-text {
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 10;
+        }
+        h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px var(--card-glow);
+        }
+        p {
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            color: var(--text-secondary);
+            font-weight: 300;
+        }
 
-        /* --- FOOTER --- */
-        footer {
-            /* تعديل طفيف ليعمل بشكل أفضل مع التمرير */
-            padding-top: 2rem;
-            padding-bottom: 1rem;
+
+        /* --- 3D SCENE & CAROUSEL --- */
+        .scene {
+            width: 300px;
+            height: 200px;
+            perspective: 1200px;
+            position: relative;
+        }
+
+        .carousel {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transform-style: preserve-3d;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .card {
+            position: absolute;
+            width: 300px;
+            height: 200px;
+            left: 0; top: 0;
+            
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-primary);
+            
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+            -webkit-box-reflect: below 10px linear-gradient(transparent, transparent, #0004);
+        }
+
+        .card:hover {
+            transform: translateZ(10px) scale(1.05) !important;
+            box-shadow: 0 0 30px var(--card-glow);
+        }
+
+        .card-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+        .card-desc {
             font-size: 0.9rem;
-            color: var(--text-color-secondary);
-            opacity: 0.7;
+            color: var(--text-secondary);
+            max-width: 80%;
         }
 
-        /* --- RESPONSIVENESS --- */
-        @media (max-width: 768px) {
-             .main-container { margin: 3rem auto; }
-            h1 { font-size: clamp(2rem, 10vw, 3rem); }
-            .project-grid {
-                grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            }
-        }
-        @media (max-width: 480px) {
-            body { padding: 1.5rem 1rem; }
-            .main-container { margin: 2rem auto; }
-            .project-grid {
-                grid-template-columns: 1fr;
-            }
-             .grid-item.wide {
-                grid-column: span 1;
-            }
-             .theme-toggle-button { top: 1rem; right: 1rem; }
-        }
     </style>
 </head>
-<body class="dark-mode">
+<body>
+    <div class="stars"></div>
 
-    <div class="aurora-container">
-        <div class="aurora-orb orb1"></div>
-        <div class="aurora-orb orb2"></div>
-        <div class="aurora-orb orb3"></div>
+    <header class="header-text">
+        <h1>Thamer's Projects</h1>
+        <p>Drag to explore the collection</p>
+    </header>
+
+    <div class="scene">
+        <div class="carousel">
+            <!-- Projects will be dynamically added here by JS -->
+            <a href="https://chat-6ivt.onrender.com" class="card">
+                <h3 class="card-title">TChat</h3>
+                <p class="card-desc">A real-time chat application.</p>
+            </a>
+            <a href="http://100.76.175.121:32400" class="card">
+                <h3 class="card-title">Plex Media</h3>
+                <p class="card-desc">Personal media library streaming.</p>
+            </a>
+            <a href="{{ url_for('tv_control_page') }}" class="card">
+                <h3 class="card-title">TV Control</h3>
+                <p class="card-desc">Remote control web interface.</p>
+            </a>
+            <a href="{{ url_for('currency_converter_page') }}" class="card">
+                <h3 class="card-title">Converter</h3>
+                <p class="card-desc">Currency exchange rate tool.</p>
+            </a>
+            <a href="http://100.76.175.121:9191/home" class="card">
+                <h3 class="card-title">Rent Tracker</h3>
+                <p class="card-desc">Manage rental payments.</p>
+            </a>
+            <a href="http://100.76.175.121:9090" class="card">
+                <h3 class="card-title">Server Panel</h3>
+                <p class="card-desc">System control dashboard.</p>
+            </a>
+             <a href="http://100.76.175.121" class="card">
+                <h3 class="card-title">Open Savings</h3>
+                <p class="card-desc">Personal finance tracker.</p>
+            </a>
+        </div>
     </div>
 
-    <main class="main-container">
-        <h1>Hello, I'm <span>Thamer</span>.</h1>
-        <h2>This is my digital playground. Explore my projects.</h2>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const carousel = document.querySelector('.carousel');
+            const cards = document.querySelectorAll('.card');
+            const numCards = cards.length;
+            const angle = 360 / numCards;
+            const radius = 350; // Adjust this to change the circle size
 
-        <div class="project-grid">
-            <a href="https://chat-6ivt.onrender.com" class="grid-item wide">TChat</a>
-            <a href="http://100.76.175.121:32400" class="grid-item wide">Plex Media Server</a>
-            <a href="{{ url_for('tv_control_page') }}" class="grid-item">Control TV</a>
-            <a href="{{ url_for('currency_converter_page') }}" class="grid-item">Currency Converter</a>
-            <a href="http://100.76.175.121" class="grid-item">Open Savings</a>
-            <a href="http://100.76.175.121:9090" class="grid-item">Server Control</a>
-            <a href="http://100.76.175.121:9191/home" class="grid-item wide">Rent Tracker</a>
-        </div>
-        
-        <footer>
-            <p>© Thamer</p>
-        </footer>
-    </main>
+            // Position cards in a 3D circle
+            cards.forEach((card, i) => {
+                const rotateY = i * angle;
+                card.style.transform = `rotateY(${rotateY}deg) translateZ(${radius}px)`;
+            });
 
-    <button class="theme-toggle-button" id="theme-toggle" aria-label="Toggle theme">
-        <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.106a.75.75 0 010 1.06l-1.591 1.59a.75.75 0 11-1.06-1.06l1.59-1.591a.75.75 0 011.06 0zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5h2.25a.75.75 0 01.75.75zM17.836 17.836a.75.75 0 01-1.06 0l-1.59-1.591a.75.75 0 111.06-1.06l1.591 1.59a.75.75 0 010 1.06zM12 18.75a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0v-2.25a.75.75 0 01.75-.75zM5.106 17.836a.75.75 0 010-1.06l1.591-1.59a.75.75 0 011.06 1.06l-1.59 1.591a.75.75 0 01-1.06 0zM4.5 12a.75.75 0 01-.75.75H1.5a.75.75 0 010-1.5h2.25a.75.75 0 01.75.75zM6.106 5.106a.75.75 0 011.06 0l1.591 1.59a.75.75 0 01-1.06 1.06L5.106 6.166a.75.75 0 010-1.06z"></path></svg>
-        <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 004.463-.948.75.75 0 01.981.649A11.25 11.25 0 0112 21a11.25 11.25 0 01-11.25-11.25.75.75 0 01.649-.981 8.97 8.97 0 004.463-.948.75.75 0 01.819.162z" clip-rule="evenodd"></path></svg>
-    </button>
+            // Drag to rotate logic
+            let isMouseDown = false;
+            let startX;
+            let currentRotation = 0;
+            let targetRotation = 0;
+            let velocity = 0;
+            const friction = 0.95; // Higher value = less friction
 
+            const getEventX = (e) => e.touches ? e.touches[0].clientX : e.clientX;
+
+            const onPointerDown = (e) => {
+                isMouseDown = true;
+                document.body.classList.add('grabbing');
+                startX = getEventX(e) - targetRotation; // Use targetRotation to continue from where it stopped
+                cancelAnimationFrame(animationFrameId);
+            };
+
+            const onPointerMove = (e) => {
+                if (!isMouseDown) return;
+                e.preventDefault();
+                const x = getEventX(e);
+                targetRotation = x - startX;
+            };
+
+            const onPointerUp = () => {
+                isMouseDown = false;
+                document.body.classList.remove('grabbing');
+                startAnimation();
+            };
+            
+            let animationFrameId;
+            const animate = () => {
+                velocity = (targetRotation - currentRotation) * 0.05;
+                currentRotation += velocity;
+                
+                carousel.style.transform = `rotateY(${currentRotation}deg)`;
+                
+                if (Math.abs(targetRotation - currentRotation) > 0.01 || isMouseDown) {
+                     animationFrameId = requestAnimationFrame(animate);
+                } else {
+                    cancelAnimationFrame(animationFrameId);
+                }
+            };
+            
+            const startAnimation = () => {
+                if (animationFrameId) cancelAnimationFrame(animationFrameId);
+                animationFrameId = requestAnimationFrame(animate);
+            }
+
+            // Mouse Events
+            document.addEventListener('mousedown', onPointerDown);
+            document.addEventListener('mousemove', onPointerMove);
+            document.addEventListener('mouseup', onPointerUp);
+            document.addEventListener('mouseleave', onPointerUp);
+
+            // Touch Events
+            document.addEventListener('touchstart', onPointerDown);
+            document.addEventListener('touchmove', onPointerMove);
+            document.addEventListener('touchend', onPointerUp);
+
+            startAnimation(); // Initial animation call
+        });
+    </script>
 </body>
 </html>
