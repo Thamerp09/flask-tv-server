@@ -83,7 +83,7 @@
                 <span class="card-arrow">↗</span>
             </a>
             <!--  الكود الجديد المضاف هنا  -->
-              <a href="alexa://smarthome" class="launch-card">
+            <a href="alexa://smarthome" class="launch-card" id="alexa-link">
                 <div class="card-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h6.75M12 15.75a3 3 0 01-3-3V4.5a3 3 0 016 0v8.25a3 3 0 01-3 3z" />
@@ -98,17 +98,28 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // الكود القديم لتحديث الوقت والتاريخ (لا تغيره)
             const timeDateElement = document.getElementById('time-date');
-            
             function updateTime() {
                 const now = new Date();
                 const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 const date = now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
                 timeDateElement.textContent = `${date} ${time}`;
             }
-            
             updateTime();
-            setInterval(updateTime, 1000); // Update every second
+            setInterval(updateTime, 1000);
+
+            // --- الكود الجديد الذي ستضيفه ---
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            const alexaLink = document.getElementById('alexa-link');
+
+            // تحقق إذا كان المستخدم على جهاز أندرويد
+            if (/android/i.test(userAgent)) {
+                // هذا هو رابط Intent الخاص بأندرويد
+                alexaLink.href = 'intent://smarthome#Intent;package=com.amazon.dee.app;scheme=alexa;end';
+            }
+            // إذا لم يكن أندرويد، سيبقى الرابط الافتراضي (alexa://smarthome) الذي يعمل على آيفون
+            // --- نهاية الكود الجديد ---
         });
     </script>
 </body>
